@@ -75,5 +75,5 @@ public class MyKeywordClass
 *How is a keyword considered as a FAIL*?<br/>
 A keyword method is considered as FAIL (and will be shown in the robot framework report as FAIL), if the method raises an _exception_. Otherwise the keyword will be considered as PASS.
 
-*Can a keyword method return null?*
+*Can a keyword method return null?*<br/>
 Yes, if a methods return parameter type is _string_ the method can return null.
