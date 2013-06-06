@@ -56,3 +56,18 @@ When a keyword such as "DO TASK" is used in a robot framework script, NRobotRemo
 
 *Is it possible for the keyword class to maintain state?*<br/>
 Yes, only one instance of the keyword class is created for the duration of the service.
+
+*How can my keyword give log information back to robot framework to include in the results file?*<br/>
+All _Trace_ information is collected by NRobotRemote when the keyword method is executed. This is passed back to robot framework to include in the results report. Example:
+
+<code language="c#">
+public class MyKeywordClass
+{
+   public String delete_file(String arg1)
+   {
+      File.Delete(arg1);
+      Trace.WriteLine(String.Format("{0} was deleted",arg1));
+   }
+}
+
+</code>
