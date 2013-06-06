@@ -73,4 +73,4 @@ public class MyKeywordClass
 </code>
 
 *How is a keyword considered as a FAIL*?<br/>
-A keyword method is considered as FAIL (and will ne shown in the robot framework report as FAIL), if the method raises an _exception_. Otherwise the keyword will be considered as PASS.
+A keyword method is considered as FAIL (and will be shown in the robot framework report as FAIL), if the method raises an _exception_. Otherwise the keyword will be considered as PASS.
