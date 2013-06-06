@@ -2,6 +2,8 @@
 
 = How To Write a Keyword Library =
 
+<wiki:toc max_depth="3" />
+
 Writing a keyword library is very simple.Create a new class library project in C#/Vb.net and add a _public_ class to the project. All public _instance_ methods of the class with:
 
   * Return type = void
@@ -12,7 +14,7 @@ Writing a keyword library is very simple.Create a new class library project in C
 Will be considered as keywords.
 *Note* _Static_ methods are not considered as keywords.
 
-=== Example ===
+== Example ==
 
 The following class exposes three keyword methods
 
@@ -44,15 +46,15 @@ The following keywords can be used by robot framework
   * DOOPERATION
   * DO TASK
   
-=== General Notes ===
+== General Notes ==
 
   * It is not possible to overload the same keyword method. For a method to be considered a keyword it must have only one implementation.
 
-=== Keyword Names ===
+== Keyword Names ==
 
 When a keyword such as "DO TASK" is used in a robot framework script, NRobotRemote will try to find a corresponding method with name "do_task". i.e. Spaces are replaced with underscores.
  
-=== FAQ ===
+== FAQ ==
 
 *Is it possible for the keyword class to maintain state?*<br/>
 Yes, only one instance of the keyword class is created for the duration of the service.
