@@ -1,0 +1,39 @@
+#summary How to use NRobotRemoteConsole
+
+= NRobotRemote Console =
+
+== Configuration ==
+
+=== Config File ===
+
+The config file _NRobotRemoteConsole.exe.config_ is used for _log4net_ configuration. By default log information is written to the console and also to a _rolling_ log file called _NRobotRemoteConsole.log_. Additional appenders can be added, see Log4Net documentation.
+
+=== Command Line ===
+
+The following command line arguments are used:
+
+|| -l || --library || required || the path and name of the keyword assembly ||
+|| -t || --type || required || the class name of the keyword class ||
+|| -p || --port || required || the port number ||
+|| -d || --doc || optional || path and name of xml documentation file ||
+
+*NOTE* The _type_ name should include the namespace.
+
+== Starting and Stopping ==
+
+To start NRobotRemoteConsole.exe supply the above command line parameters. <br/>
+To stop NRobotRemoteConsole.exe:
+
+  * Press Ctrl+C in the window
+  * Close the windows
+  * Send a HTTP DELETE request to the port number
+
+*NOTE* The Robot framework STOP REMOTE SERVER keyword is currently not implemented.
+
+== Monitoring ==
+
+A remote _NRobotRemoteConsole_ can be checked to see if up and running by pointing a web browser to http://host:port. This will display information on the NRobotRemote instance.
+
+
+
+
