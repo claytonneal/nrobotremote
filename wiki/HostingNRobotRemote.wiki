@@ -1,0 +1,25 @@
+#summary How to host NRobotRemote in own application
+
+= Hosting NRobotRemote =
+
+NRobotRemote is designed as an asynchronous component that can be hosted in any application. Infact NRobotRemoteConsole.exe is no more than a console host for the NRobotRemote component.
+
+The following example shows how to start the NRobotRemote service.
+
+<code language="c#">
+
+RemoteService srv = new RemoteService(options.library,options.type,options.port,options.docfile);
+srv.StartAsync();
+Console.ReadLine();
+srv.Stop();
+
+</code>
+
+*NOTES*
+
+  * The docfile parameter is optional
+  * Two background threads are started when _StartAsync_ is called, one thread to listen for HTTP requests, and the other to process HTTP requests.
+
+
+
+
