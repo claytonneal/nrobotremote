@@ -53,6 +53,27 @@ The following keywords can be used by robot framework
 == Keyword Names ==
 
 When a keyword such as "DO TASK" is used in a robot framework script, NRobotRemote will try to find a corresponding method with name "do_task". i.e. Spaces are replaced with underscores.
+
+== Documentation ==
+
+If you compile your keyword class to produce xml documentation, the xml documentation file can be passed to NRobotRemote. When the keyword is executed the _summary_ xml element of the documentation is passed back to robot framework and appears in the results file.
+
+For example:
+
+<code language="c#">
+   /// <summary>
+   /// A method with documentation
+   /// </summary>
+   /// <param name="arg1">parameter1</param>
+   /// <param name="arg2">parameter2</param>
+   /// <returns>param1+param2</returns>
+   public string withdocmethod(string arg1, string arg2) 
+   { 
+      return (arg1+arg2); 
+   }
+</code>
+
+When executed the text "A method with documentation" will appear in the robot framework report.
  
 == FAQ ==
 
