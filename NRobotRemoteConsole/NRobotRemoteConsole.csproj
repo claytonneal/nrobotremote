@@ -74,7 +74,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NRobotRemote.Imp\NRobotRemote.csproj">
+    <ProjectReference Include="..\NRobotRemote\NRobotRemote.csproj">
       <Project>{1BD61A13-DA09-477A-8A42-4072681DF950}</Project>
       <Name>NRobotRemote</Name>
     </ProjectReference>
