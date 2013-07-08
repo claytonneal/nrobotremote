@@ -20,9 +20,8 @@ namespace NRobotRemote.Services
 		private static readonly ILog log = LogManager.GetLogger(typeof(HTTPService));
 		
 		//properties
-		private int _port;
+		private RemoteService _service;
 		private HttpListener _listener;
-		private XmlRpcService _xmlrpcservice;
 		private Thread _httpthread;
 		private Thread _keywordthread;
 		private Queue<HttpListenerContext> _requests;
@@ -33,15 +32,14 @@ namespace NRobotRemote.Services
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public HTTPService(XmlRpcService xmlrpcservice, int port)
+		public HTTPService(RemoteService service)
 		{
 			//check
-			if (xmlrpcservice==null) throw new Exception("Unable to instanciate HTTPService - No XmlRpcService instance specified");
+			if (service==null) throw new Exception("Unable to instanciate HTTPService - Service instance specified");
+			_service = service;
 			//setup http listener
-			_xmlrpcservice = xmlrpcservice;
-			_port = port;
 			_listener = new HttpListener();
-			﻿_﻿listener.Prefixes.Add(String.Format("http://127.0.0.1:{0}/",_port));
+			﻿_﻿listener.Prefixes.Add(String.Format("http://127.0.0.1:{0}/", _service._config.port));
 			_requests = new Queue<HttpListenerContext>();
             //set statuses
             _islistening = false;
@@ -53,7 +51,7 @@ namespace NRobotRemote.Services
 		/// </summary>
 		private void DoWork_Listener()
 		{
-			log.Debug(String.Format("HTTP Listener started on port {0}",_port));
+			log.Debug(String.Format("HTTP Listener started on port {0}",_service._config.port));
 			_﻿listener.Start();
 			_islistening = true;
 			﻿while (true)
@@ -105,7 +103,7 @@ namespace NRobotRemote.Services
 				if (_requests.Count > 0)
 				{
 					HttpListenerContext context = _requests.Dequeue();
-					_xmlrpcservice.ProcessRequest(context);
+					_service._xmlrpcservice.ProcessRequest(context);
 				}
 			}
 			_isprocessing = false;
@@ -145,7 +143,7 @@ namespace NRobotRemote.Services
 			{
 				//send DELETE method call
                 log.Debug("Sending HTTP request to stop listener service");
-                WebRequest stopreq = WebRequest.Create(String.Format("http://127.0.0.1:{0}/", _port));
+                WebRequest stopreq = WebRequest.Create(String.Format("http://127.0.0.1:{0}/", _service._config.port));
                 stopreq.Method = "DELETE";
                 WebResponse resp = stopreq.GetResponse();
 			}
@@ -171,7 +169,7 @@ namespace NRobotRemote.Services
             IPEndPoint[] ipEndPoints = ipProperties.GetActiveTcpListeners();
             foreach (IPEndPoint endPoint in ipEndPoints)
             {
-                if (endPoint.Port == _port)
+                if (endPoint.Port == _service._config.port)
                 {
                     inUse = true;
                     break;

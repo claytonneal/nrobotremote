@@ -23,14 +23,13 @@ namespace NRobotRemote.Services
 ﻿  ﻿  	
 		//log4net
 		private static readonly ILog log = LogManager.GetLogger(typeof(XmlRpcService));
-		private KeywordMap _keywordmap;
-		private LibraryDoc _keydoc;
+		private RemoteService _service;
+		
 ﻿  ﻿  ﻿
-		public XmlRpcService(KeywordMap map, LibraryDoc doc = null)
+		public XmlRpcService(RemoteService service)
 		{
-			if (map==null) throw new Exception("No Keyword Map instance");
-			 _keywordmap = map;
-			 _keydoc = doc;﻿
+			if (service==null) throw new Exception("No Service for XmlRpcService");
+			 _service = service;﻿
 		}
 ﻿  ﻿  
 	﻿  ﻿  /// <summary>
@@ -41,7 +40,7 @@ namespace NRobotRemote.Services
 	﻿  ﻿  ﻿	try 
 			{
 				log.Debug("XmlRpc Method call - get_keyword_names");
-				string[] result =  _keywordmap.GetKeywordNames();
+				string[] result =  _service._keywordmap.GetKeywordNames();
 				log.Debug("Method names are:");
 				log.Debug(String.Join(",",result));
 				return result;
@@ -61,7 +60,7 @@ namespace NRobotRemote.Services
 			try
 			{
 				log.Debug("XmlRpc Method call - run_keyword");
-				var result = _keywordmap.Executor.ExecuteKeyword(keyword,args);
+				var result = _service._keywordmap.Executor.ExecuteKeyword(keyword,args);
 				XmlRpcStruct kr = new XmlRpcStruct();
 				kr.Add("return",result.@return);
 				kr.Add("status",result.status);
@@ -90,7 +89,7 @@ namespace NRobotRemote.Services
 			try
 			{
 				log.Debug("XmlRpc Method call - get_keyword_arguments");
-				return _keywordmap.GetKeyword(keyword).ArgumentNames;
+				return _service._keywordmap.GetKeyword(keyword).ArgumentNames;
 			}
 			catch (UnknownKeywordException e)
 			{
@@ -116,10 +115,10 @@ namespace NRobotRemote.Services
 	﻿  ﻿  public string get_keyword_documentation(string keyword)
 	﻿  ﻿  {
 		﻿  ﻿ 	log.Debug("XmlRpc Method call - get_keyword_documentation");
-			if(_keydoc!=null)
+			if(_service._keyworddoc!=null)
 			{
-				var kwd = _keywordmap.GetKeyword(keyword);
-				var doc =  _keydoc.GetMethodDoc(kwd.Method);
+				var kwd = _service._keywordmap.GetKeyword(keyword);
+				var doc =  _service._keyworddoc.GetMethodDoc(kwd.Method);
 				return doc;
 			}
 			else

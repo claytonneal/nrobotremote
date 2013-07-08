@@ -21,6 +21,7 @@ namespace NRobotRemote.Keywords
 		private Type _type;
 		private Object _instance;
 		private KeywordExecutor _executor;
+		private RemoteService _service;
 		
 		/// <summary>
 		/// Keyword executor for the map
@@ -36,13 +37,16 @@ namespace NRobotRemote.Keywords
 		/// <summary>
 		/// Constructor from assembly and type
 		/// </summary>
-		public KeywordMap(String library, String type)
+		public KeywordMap(RemoteService service)
 		{
-			if (String.IsNullOrEmpty(library)) throw new ArgumentNullException("Unable to instanciate KeywordMap - no library specified");
-			if (String.IsNullOrEmpty(type)) throw new ArgumentNullException("Unable to instanciate KeywordMap - no type specified");
-			_library = Assembly.LoadFrom(library);
-			_type = _library.GetType(type);
-			if (_type==null) throw new Exception(String.Format("Type {0} was not found",type));
+			//check
+			if (service==null) throw new Exception("No service specified for KeywordMap");
+			_service = service;
+			if (String.IsNullOrEmpty(_service._config.library)) throw new ArgumentNullException("Unable to instanciate KeywordMap - no library specified");
+			if (String.IsNullOrEmpty(_service._config.type)) throw new ArgumentNullException("Unable to instanciate KeywordMap - no type specified");
+			_library = Assembly.LoadFrom(_service._config.library);
+			_type = _library.GetType(_service._config.type);
+			if (_type==null) throw new Exception(String.Format("Type {0} was not found",_service._config.type));
 			_instance = Activator.CreateInstance(_type);
 			_executor = new KeywordExecutor(this,_instance);
 			BuildMap();

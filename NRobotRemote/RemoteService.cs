@@ -18,37 +18,46 @@ namespace NRobotRemote
 		private static readonly ILog log = LogManager.GetLogger(typeof(RemoteService));
 		
 		//properties
-        private HTTPService _httpservice;
-        private XmlRpcService _xmlrpcservice;
-        private KeywordMap _keywordmap;
-        private LibraryDoc _keyworddoc;
-		
-		
+        internal HTTPService _httpservice;
+        internal XmlRpcService _xmlrpcservice;
+        internal KeywordMap _keywordmap;
+        internal LibraryDoc _keyworddoc;
+        internal RemoteServiceConfig _config;
+        
+        /// <summary>
+        /// Constructor with direct arguments
+        /// </summary>
+        public RemoteService(String Library, String Type, String Port, String Docfile = null) : this(new RemoteServiceConfig {library = Library, type = Type, port = int.Parse(Port), docfile = Docfile } )
+        {
+        }
+        
+        
 		/// <summary>
 		/// Creates a new instance of the robot service
 		/// </summary>
-		public RemoteService(String library, String type, String port, String docfile = null)
+		public RemoteService(RemoteServiceConfig config)
 		{
-			log.Info(string.Format("[RemoteService Library={0}, Type={1}, Docfile={2}, Port={3}]", library, type, docfile, port));
 			//check
-			if (String.IsNullOrEmpty(library)) throw new ArgumentNullException("No library specified");
-			if (String.IsNullOrEmpty(port)) throw new ArgumentNullException("No Port specified");
-			if (String.IsNullOrEmpty(type)) throw new ArgumentNullException("No Type specified");
-			if ((!String.IsNullOrEmpty(docfile))&&(!File.Exists(docfile))) throw new Exception("Documentation file not found");
-			if (!File.Exists(library)) throw new Exception("Library file not found");
+			if (config==null) throw new ArgumentException("No configuration specified");
+			if (String.IsNullOrEmpty(config.library)) throw new ArgumentNullException("No library specified");
+			if (String.IsNullOrEmpty(config.type)) throw new ArgumentNullException("No Type specified");
+			if ((!String.IsNullOrEmpty(config.docfile))&&(!File.Exists(config.docfile))) throw new Exception("Documentation file not found");
+			if (!File.Exists(config.library)) throw new Exception("Library file not found");
+			_config = config;
+			log.Info(_config.ToString());
 			//setup keyword map
-			_keywordmap = new KeywordMap(library,type);
+			_keywordmap = new KeywordMap(this);
 			//setup documentator
-			if ((!String.IsNullOrEmpty(docfile))&&(File.Exists(docfile)))
+			if ((!String.IsNullOrEmpty(_config.docfile))&&(File.Exists(_config.docfile)))
 			{
-				_keyworddoc = new LibraryDoc(docfile);
+				_keyworddoc = new LibraryDoc(_config.docfile);
 			}
 			else
 			{
 				_keyworddoc = null;
 			}
-			_xmlrpcservice = new XmlRpcService(_keywordmap,_keyworddoc);
-			_httpservice = new HTTPService(_xmlrpcservice,Convert.ToInt32(port));
+			_xmlrpcservice = new XmlRpcService(this);
+			_httpservice = new HTTPService(this);
 		}
 		
 		
