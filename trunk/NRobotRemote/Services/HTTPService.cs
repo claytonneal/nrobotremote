@@ -183,7 +183,7 @@ namespace NRobotRemote.Services
         /// </summary>
         private void WriteStatusPage(HttpListenerResponse response)
         {
-        	string html = String.Format("<html><body><h1>NRobotRemote</h1><p><table><tr><td>Version</td><td>{0}</td></tr></table></body>",Assembly.GetExecutingAssembly().GetName().Version);
+        	string html = String.Format("<html><body><h1>NRobotRemote</h1><p><table><tr><td>Version</td><td>{0}</td></tr></table><h2>Available Keywords</h2>{1}</body>",Assembly.GetExecutingAssembly().GetName().Version,_service._keyworddoc.GetHTMLDoc());
         	response.StatusCode = 200;
 			byte[] buffer = System.Text.Encoding.UTF8.GetBytes(html);
 			response.OutputStream.Write(buffer,0,buffer.Length);

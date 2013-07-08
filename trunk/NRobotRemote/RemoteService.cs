@@ -50,7 +50,7 @@ namespace NRobotRemote
 			//setup documentator
 			if ((!String.IsNullOrEmpty(_config.docfile))&&(File.Exists(_config.docfile)))
 			{
-				_keyworddoc = new LibraryDoc(_config.docfile);
+				_keyworddoc = new LibraryDoc(this);
 			}
 			else
 			{
