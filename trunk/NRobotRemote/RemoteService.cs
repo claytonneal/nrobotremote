@@ -25,12 +25,18 @@ namespace NRobotRemote
         internal RemoteServiceConfig _config;
         
         /// <summary>
+        /// Event called when keyword stop_remote_server is executed
+        /// Event is raised on background thread
+        /// </summary>
+        public event EventHandler StopRequested;
+        
+        
+        /// <summary>
         /// Constructor with direct arguments
         /// </summary>
         public RemoteService(String Library, String Type, String Port, String Docfile = null) : this(new RemoteServiceConfig {library = Library, type = Type, port = int.Parse(Port), docfile = Docfile } )
         {
         }
-        
         
 		/// <summary>
 		/// Creates a new instance of the robot service
@@ -94,6 +100,17 @@ namespace NRobotRemote
 	        return principal.IsInRole(WindowsBuiltInRole.Administrator);
     	}
 
+		/// <summary>
+		/// Raises StopRequested event
+		/// </summary>
+		internal void OnStopRequested(EventArgs e)
+		{
+			EventHandler handler = StopRequested;
+			if (handler!= null)
+			{
+				handler(this, e);
+			}
+		}
 		
 	}
 }

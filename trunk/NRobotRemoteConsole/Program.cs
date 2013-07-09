@@ -38,6 +38,7 @@ namespace NRobotRemoteConsole
 	        	
 	        	//start service
 				RemoteService srv = new RemoteService(options.library,options.type,options.port,options.docfile);
+				srv.StopRequested += OnStopHandler;
 				srv.StartAsync();
 				
 				//wait
@@ -55,6 +56,16 @@ namespace NRobotRemoteConsole
 		return 1;
 
 ﻿  ﻿  }
+
+	/// <summary>
+	/// Event handler for stop_remote_server
+	/// </summary>
+	public static void OnStopHandler(object sender, EventArgs e)
+	{
+		log.Debug("Stop request was received - closing down");
+		Environment.Exit(0);
+	}
+	
 ﻿  ﻿ 
 ﻿  }
 

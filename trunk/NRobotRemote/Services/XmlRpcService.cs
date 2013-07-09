@@ -23,7 +23,10 @@ namespace NRobotRemote.Services
 ﻿  ﻿  	
 		//log4net
 		private static readonly ILog log = LogManager.GetLogger(typeof(XmlRpcService));
+		
+		//properties
 		private RemoteService _service;
+		private const String CStopRemoteServer = "STOP REMOTE SERVER";
 		
 ﻿  ﻿  ﻿
 		public XmlRpcService(RemoteService service)
@@ -40,7 +43,9 @@ namespace NRobotRemote.Services
 	﻿  ﻿  ﻿	try 
 			{
 				log.Debug("XmlRpc Method call - get_keyword_names");
-				string[] result =  _service._keywordmap.GetKeywordNames();
+				var kwnames =  _service._keywordmap.GetKeywordNames();
+				kwnames.Add(CStopRemoteServer);
+				var result = kwnames.ToArray();
 				log.Debug("Method names are:");
 				log.Debug(String.Join(",",result));
 				return result;
@@ -57,28 +62,46 @@ namespace NRobotRemote.Services
 	﻿  ﻿  /// </summary>
 	﻿  ﻿  public XmlRpcStruct run_keyword(string keyword, object[] args)
 	  ﻿  ﻿{
-			try
+			log.Debug("XmlRpc Method call - run_keyword");
+			XmlRpcStruct kr = new XmlRpcStruct();
+			//check for stop remote server
+			if (String.Equals(keyword,CStopRemoteServer,StringComparison.CurrentCultureIgnoreCase))
 			{
-				log.Debug("XmlRpc Method call - run_keyword");
-				var result = _service._keywordmap.Executor.ExecuteKeyword(keyword,args);
-				XmlRpcStruct kr = new XmlRpcStruct();
-				kr.Add("return",result.@return);
-				kr.Add("status",result.status);
-				kr.Add("error",result.error);
-				kr.Add("traceback",result.traceback);
-				kr.Add("output",result.output);
-				return kr;
+				//start background thread to raise event
+				Thread stopthread = new Thread(delayed_stop_remote_server);
+				stopthread.IsBackground = true;
+				stopthread.Start();
+				log.Debug("Stop remote server thread started");
+				//return success
+				kr.Add("return",String.Empty);
+				kr.Add("status","PASS");
+				kr.Add("error",String.Empty);
+				kr.Add("traceback",String.Empty);
+				kr.Add("output",String.Empty);
 			}
-			catch (UnknownKeywordException e)
+			else
 			{
-				log.Error(String.Format("Exception in method - run_keyword : {0}",e.Message));
-				throw new XmlRpcUnknownKeywordException(e.Message);
+				try
+				{
+					var result = _service._keywordmap.Executor.ExecuteKeyword(keyword,args);
+					kr.Add("return",result.@return);
+					kr.Add("status",result.status);
+					kr.Add("error",result.error);
+					kr.Add("traceback",result.traceback);
+					kr.Add("output",result.output);
+				}
+				catch (UnknownKeywordException e)
+				{
+					log.Error(String.Format("Exception in method - run_keyword : {0}",e.Message));
+					throw new XmlRpcUnknownKeywordException(e.Message);
+				}
+				catch (Exception ee)
+				{
+					log.Error(String.Format("Exception in method - run_keyword : {0}",ee.Message));
+					throw new XmlRpcInternalErrorException(ee.Message);
+				}
 			}
-			catch (Exception ee)
-			{
-				log.Error(String.Format("Exception in method - run_keyword : {0}",ee.Message));
-				throw new XmlRpcInternalErrorException(ee.Message);
-			}
+			return kr;
 		}
 		
 		/// <summary>
@@ -86,9 +109,13 @@ namespace NRobotRemote.Services
 	﻿  ﻿  /// </summary>
 	﻿  ﻿  public string[] get_keyword_arguments(string keyword)
 	﻿  ﻿  {
+			log.Debug("XmlRpc Method call - get_keyword_arguments");
+			if (String.Equals(keyword,CStopRemoteServer,StringComparison.CurrentCultureIgnoreCase))
+			{
+				return null;
+			}
 			try
 			{
-				log.Debug("XmlRpc Method call - get_keyword_arguments");
 				return _service._keywordmap.GetKeyword(keyword).ArgumentNames;
 			}
 			catch (UnknownKeywordException e)
@@ -115,6 +142,10 @@ namespace NRobotRemote.Services
 	﻿  ﻿  public string get_keyword_documentation(string keyword)
 	﻿  ﻿  {
 		﻿  ﻿ 	log.Debug("XmlRpc Method call - get_keyword_documentation");
+			if (String.Equals(keyword,CStopRemoteServer,StringComparison.CurrentCultureIgnoreCase))
+			{
+				return "Raises event to stop the remote server in the server host";
+			}
 			if(_service._keyworddoc!=null)
 			{
 				var kwd = _service._keywordmap.GetKeyword(keyword);
@@ -127,7 +158,24 @@ namespace NRobotRemote.Services
 			}
 	﻿  ﻿  }
 
-﻿  
+	﻿  	/// <summary>
+		/// Raises event in RemoteService that a stop request was received
+		/// </summary>
+		public void stop_remote_server()
+		{
+			log.Debug("XmlRpc Method call - stop_remote_server");
+			_service.OnStopRequested(EventArgs.Empty);
+		}
+	
+		/// <summary>
+		/// If stop remote server executed as keyword, need to delay to allow return value
+		/// </summary>
+		public void delayed_stop_remote_server()
+		{
+			System.Threading.Thread.Sleep(4000);
+			stop_remote_server();
+		}
+	
 }
 
 }
