@@ -27,6 +27,8 @@ namespace NRobotRemote.Services
 		//properties
 		private RemoteService _service;
 		private const String CStopRemoteServer = "STOP REMOTE SERVER";
+		private const String CIntro = "__INTRO__";
+		private const String CInit = "__INIT__";
 		
 ﻿  ﻿  ﻿
 		public XmlRpcService(RemoteService service)
@@ -142,15 +144,41 @@ namespace NRobotRemote.Services
 	﻿  ﻿  public string get_keyword_documentation(string keyword)
 	﻿  ﻿  {
 		﻿  ﻿ 	log.Debug("XmlRpc Method call - get_keyword_documentation");
+			//check for stop_remote_server
 			if (String.Equals(keyword,CStopRemoteServer,StringComparison.CurrentCultureIgnoreCase))
 			{
 				return "Raises event to stop the remote server in the server host";
 			}
 			if(_service._keyworddoc!=null)
 			{
-				var kwd = _service._keywordmap.GetKeyword(keyword);
-				var doc =  _service._keyworddoc.GetMethodDoc(kwd.Method);
-				return doc;
+				try
+				{
+					//check for INTRO 
+					if (String.Equals(keyword,CIntro,StringComparison.CurrentCultureIgnoreCase))
+					{
+						return _service._keyworddoc.GetLibraryDoc();
+					}
+					//check for init
+					if (String.Equals(keyword,CInit,StringComparison.CurrentCultureIgnoreCase))
+					{
+						return String.Empty;    
+					}
+					//get keyword documentation
+					var kwd = _service._keywordmap.GetKeyword(keyword);
+					var doc =  _service._keyworddoc.GetMethodDoc(kwd.Method);
+					return doc;
+				}
+				catch (UnknownKeywordException e)
+				{
+					log.Error(String.Format("Exception in method - get_keyword_documentation : {0}",e.Message));
+					throw new XmlRpcUnknownKeywordException(e.Message);
+				}
+				catch (Exception ee)
+				{
+					log.Error(String.Format("Exception in method - get_keyword_documentation : {0}",ee.Message));
+					throw new XmlRpcInternalErrorException(ee.Message);
+				}
+				
 			}
 			else
 			{
