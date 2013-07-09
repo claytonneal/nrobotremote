@@ -19,17 +19,22 @@ namespace NRobotRemote.Doc
 		private static readonly ILog log = LogManager.GetLogger(typeof(LibraryDoc));
 		
 		private RemoteService _service;
-		private XDocument _docxml = null;
+		private XDocument _docxml;
 		
 		public LibraryDoc(RemoteService service)
 		{
 			if (service==null) throw new Exception("No Service specified for LibraryDoc");
 			_service = service;
-			//check
-			if (String.IsNullOrEmpty(_service._config.docfile)) throw new ArgumentNullException("Documentation file is null");
-			if (!File.Exists(_service._config.docfile)) throw new FileNotFoundException("Documentation file not found");
-			_docxml = XDocument.Load(_service._config.docfile);
-			log.Debug("XML Documentation file loaded");
+			//load file
+			_docxml = null;
+			if (!String.IsNullOrEmpty(_service._config.docfile)) 
+			{
+				if (File.Exists(_service._config.docfile)) 
+				{
+					_docxml = XDocument.Load(_service._config.docfile);
+					log.Debug("XML Documentation file loaded");
+				}
+			}
 		}
 		
 		/// <summary>
