@@ -31,4 +31,4 @@ To stop NRobotRemoteConsole.exe:
 
 == Monitoring ==
 
-A remote _NRobotRemoteConsole_ can be checked to see if up and running by pointing a web browser to http://host:port. This will display information on the NRobotRemote instance, and the available keywords.
+A remote _NRobotRemoteConsole_ can be checked to see if up and running by pointing a web browser to http://host:port. This will display information on the NRobotRemote instance, and the available keywords. This is also useful for example if NRobotRemote is started via Ant, the http condition can be used to wait for it to start.
