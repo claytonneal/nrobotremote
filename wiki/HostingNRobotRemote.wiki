@@ -15,11 +15,11 @@ srv.Stop();
 
 </code>
 
+_RemoteService_ also has a public event called _StopRequested_ this event is raised when keyword STOP REMOTE SERVER is called. The host application can determine if to close or not by handling this event. The event is called in a background thread.
+
 *NOTES*
 
   * The docfile parameter is optional
   * Two background threads are started when _StartAsync_ is called, one thread to listen for HTTP requests, and the other to process HTTP requests.
-
-
 
 
