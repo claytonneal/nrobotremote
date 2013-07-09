@@ -57,6 +57,8 @@ When a keyword such as "DO TASK" is used in a robot framework script, NRobotRemo
 == Documentation ==
 
 If you compile your keyword class to produce xml documentation, the xml documentation file can be passed to NRobotRemote. When the keyword is executed the _summary_ xml element of the documentation for the executed method is passed back to robot framework and appears in the results file.
+
+It is also possible to use the _libdoc_ tool from Robot Framework to document all the keywords hosted in NRobotRemote. See Robot Framework documentation on libdoc command line parameters.
  
 == FAQ ==
 
