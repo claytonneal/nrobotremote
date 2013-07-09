@@ -16,5 +16,7 @@ namespace NRobotRemote
 		string[] get_keyword_arguments(string keyword);
 		[XmlRpcMethod]
 		string get_keyword_documentation(string keyword);
+		[XmlRpcMethod]
+		void stop_remote_server();
 	}
 }

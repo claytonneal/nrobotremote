@@ -127,10 +127,10 @@ namespace NRobotRemote.Keywords
 		/// <summary>
 		/// Gets all keyword names from the map
 		/// </summary>
-		public string[] GetKeywordNames()
+		public List<String> GetKeywordNames()
 		{
 			var names = _keywords.Select(x => x.Value.Name);
-			return names.ToArray();
+			return names.ToList();
 		}
 		
 		

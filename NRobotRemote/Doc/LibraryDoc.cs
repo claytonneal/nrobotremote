@@ -61,7 +61,7 @@ namespace NRobotRemote.Doc
 			html.Append("<thead><tr style=\" background-color: rgb(153, 153, 153)\">");
 			html.Append("<th>Keyword</th><th>Arguments</th><th>Description</th></tr>");
 			html.Append("</thead><tbody>");
-			var names = _service._keywordmap.GetKeywordNames();
+			var names = _service._keywordmap.GetKeywordNames().ToArray();
 			Array.Sort(names);
 			foreach(String name in names)
 			{
