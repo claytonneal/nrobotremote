@@ -25,8 +25,8 @@ To start NRobotRemoteConsole.exe supply the above command line parameters. <br/>
 To stop NRobotRemoteConsole.exe:
 
   * Press Ctrl+C in the window
-  * Close the windows
-  * Execute keyword "STOP REMOTE SERVER"]
+  * Close the window
+  * Execute keyword "STOP REMOTE SERVER"
   * Call XmlRpc method stop_remote_server
 
 == Monitoring ==
