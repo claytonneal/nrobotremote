@@ -35,6 +35,18 @@ namespace NRobotRemote.Keywords
 		}
 		
 		/// <summary>
+		/// Get Type of the keyword class
+		/// </summary>
+		public Type KeywordClassType
+		{
+			get
+			{
+				return _type;
+			}
+		}
+		
+		
+		/// <summary>
 		/// Constructor from assembly and type
 		/// </summary>
 		public KeywordMap(RemoteService service)

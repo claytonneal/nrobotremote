@@ -5,6 +5,9 @@ using System.Diagnostics;
 
 namespace NRobotRemote.Test.Keywords
 {
+		/// <summary>
+		/// Class for keywords for unit testing
+		/// </summary>
         public class PublicClass
         {
 

@@ -60,6 +60,19 @@ namespace NRobotRemote.Test
 			string doc = _client.get_keyword_documentation("some unknown keyword");
 		}
 		
+		[Test]
+		public void intro()
+		{
+			string doc = _client.get_keyword_documentation("__INTRO__");
+			Assert.IsTrue(doc.Length > 0);
+		}
+		
+		[Test]
+		public void init()
+		{
+			string doc = _client.get_keyword_documentation("__INIT__");
+			Assert.IsTrue(doc.Length == 0);
+		}
 		
 	}
 }

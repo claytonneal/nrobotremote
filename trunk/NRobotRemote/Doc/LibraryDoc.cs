@@ -56,6 +56,27 @@ namespace NRobotRemote.Doc
 		}
 		
 		/// <summary>
+		/// Gets xml documentation of the library class type
+		/// </summary>
+		/// <returns></returns>
+		public String GetLibraryDoc()
+		{
+			if (_docxml!=null)
+			{
+				var kwtype = _service._keywordmap.KeywordClassType;
+				var doc = kwtype.GetXmlDocumentation(_docxml);
+				log.Debug(String.Format("Documentation for library : {0}",doc));
+				return doc;	
+			}
+			else
+			{
+				log.Warn("No xml documentation file loaded, returning empty string");
+				return String.Empty;
+			}
+		}
+			
+		
+		/// <summary>
 		/// Gets a Html table for display of all keyword documentation
 		/// </summary>
 		public String GetHTMLDoc()
