@@ -1,0 +1,28 @@
+#summary Using NRobotRemote and RIDE
+
+= Introduction =
+
+RIDE (Robot IDE) is a GUI for creating robot framework test cases. One of its main features is _keyword completion_, allowing you to design tests without referencing lots of documentation. Further information on RIDE is available [https://github.com/robotframework/RIDE here]
+
+This page details how .Net keyword libraries can be used with RIDE.
+
+= Details =
+
+RIDE cannot directly interrogate a .Net keyword library to find what keywords are available in it. However a "Library Spec" file can be given to RIDE.
+
+== Generating a Library Spec File ==
+
+A library spec file is created using the robot framework libdoc tool. To use this tool with NRobotRemote:
+
+  * Start NRobotRemote with your keyword library and xml documentation
+  * Execute libdoc pointing it to NRobotRemote host and port number
+
+Example:
+
+<code>
+java -jar robotframework-2.8.1.jar libdoc --name TestLib Remote::localhost:8271 TestLib.html
+</code>
+
+== Giving RIDE the Library Spec File ==
+
+Once the library spec html file is created by _libdoc_ it has to be passed to RIDE. Details of this can be found [https://github.com/robotframework/RIDE/wiki/Keyword-Completion#wiki-using-library-specs here]
