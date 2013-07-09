@@ -15,14 +15,14 @@ RIDE cannot directly interrogate a .Net keyword library to find what keywords ar
 A library spec file is created using the robot framework libdoc tool. To use this tool with NRobotRemote:
 
   * Start NRobotRemote with your keyword library and xml documentation
-  * Execute libdoc pointing it to NRobotRemote host and port number
+  * Execute libdoc pointing it to NRobotRemote host and port number, and create an xml file
 
 Example:
 
 <code>
-java -jar robotframework-2.8.1.jar libdoc --name TestLib Remote::localhost:8271 TestLib.html
+java -jar robotframework-2.8.1.jar libdoc --name TestLib Remote::localhost:8271 TestLib.xml
 </code>
 
 == Giving RIDE the Library Spec File ==
 
-Once the library spec html file is created by _libdoc_ it has to be passed to RIDE. Details of this can be found [https://github.com/robotframework/RIDE/wiki/Keyword-Completion#wiki-using-library-specs here]
+Once the library spec xml file is created by _libdoc_ it has to be passed to RIDE. Details of this can be found [https://github.com/robotframework/RIDE/wiki/Keyword-Completion#wiki-using-library-specs here]
