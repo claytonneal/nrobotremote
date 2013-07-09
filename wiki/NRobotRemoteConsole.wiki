@@ -26,10 +26,9 @@ To stop NRobotRemoteConsole.exe:
 
   * Press Ctrl+C in the window
   * Close the windows
-  * Execute keyword "STOP REMOTE SERVER"
+  * Execute keyword "STOP REMOTE SERVER"]
+  * Call XmlRpc method stop_remote_server
 
 == Monitoring ==
 
 A remote _NRobotRemoteConsole_ can be checked to see if up and running by pointing a web browser to http://host:port. This will display information on the NRobotRemote instance, and the available keywords.
-
-
