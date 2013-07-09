@@ -54,14 +54,8 @@ namespace NRobotRemote
 			//setup keyword map
 			_keywordmap = new KeywordMap(this);
 			//setup documentator
-			if ((!String.IsNullOrEmpty(_config.docfile))&&(File.Exists(_config.docfile)))
-			{
-				_keyworddoc = new LibraryDoc(this);
-			}
-			else
-			{
-				_keyworddoc = null;
-			}
+			_keyworddoc = new LibraryDoc(this);
+			//setup services
 			_xmlrpcservice = new XmlRpcService(this);
 			_httpservice = new HTTPService(this);
 		}
