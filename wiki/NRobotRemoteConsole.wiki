@@ -26,14 +26,10 @@ To stop NRobotRemoteConsole.exe:
 
   * Press Ctrl+C in the window
   * Close the windows
-  * Send a HTTP DELETE request to the port number
-
-*NOTE* The Robot framework STOP REMOTE SERVER keyword is currently not implemented.
+  * Execute keyword "STOP REMOTE SERVER"
 
 == Monitoring ==
 
-A remote _NRobotRemoteConsole_ can be checked to see if up and running by pointing a web browser to http://host:port. This will display information on the NRobotRemote instance.
-
-
+A remote _NRobotRemoteConsole_ can be checked to see if up and running by pointing a web browser to http://host:port. This will display information on the NRobotRemote instance, and the available keywords.
 
 
