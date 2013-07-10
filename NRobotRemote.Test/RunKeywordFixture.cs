@@ -141,7 +141,21 @@ namespace NRobotRemote.Test
             Assert.IsTrue(String.IsNullOrEmpty(result["return"].ToString()));
         }
 		
-		
+		[Test]
+        public void exec_returnfalse()
+        {
+            XmlRpcStruct result = _client.run_keyword("exec returnfalse", new object[0]);
+            Assert.IsTrue(result["return"].GetType().Equals(typeof(System.Boolean)));
+            Assert.IsFalse((Boolean)result["return"]);
+        }
+        
+        [Test]
+        public void exec_returntrue()
+        {
+            XmlRpcStruct result = _client.run_keyword("exec returntrue", new object[0]);
+            Assert.IsTrue(result["return"].GetType().Equals(typeof(System.Boolean)));
+            Assert.IsTrue((Boolean)result["return"]);
+        }
 		
 	}
 }

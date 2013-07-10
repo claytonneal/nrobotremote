@@ -18,7 +18,7 @@ namespace NRobotRemote.Keywords
 		
 		public String status {get; set; }
 		public String output {get; set; }
-		public String @return {get; set; }
+		public Object @return {get; set; }
 		public String error {get; set;}
 		public String traceback {get; set;}
 		public double duration {get; set; }

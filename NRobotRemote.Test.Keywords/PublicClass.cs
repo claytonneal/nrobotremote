@@ -59,6 +59,8 @@ namespace NRobotRemote.Test.Keywords
     public string exec_stringparam(string arg1, string arg2) { return (arg1 + arg2); }
 	public void exec_withtrace() { Trace.Write("Hello"); }
     public string exec_returnsnull() { return null; }
+    public bool exec_returnfalse() { return false; }
+	public Boolean exec_returntrue() { return true; }
 
 #endregion
 
