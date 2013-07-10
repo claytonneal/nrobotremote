@@ -31,7 +31,7 @@ namespace NRobotRemote.Keywords
 		{
 			Boolean result = false;
 			
-			//check return types (void, string, boolean)
+			//check return types (void, string, boolean, int32, int64, double)
 			Type returntype = mi.ReturnParameter.ParameterType;
 			if (returntype.Equals(typeof(void)))
 			{
@@ -42,6 +42,18 @@ namespace NRobotRemote.Keywords
 				result = true;
 			}
 			if (returntype.Equals(typeof(System.Boolean)))
+			{
+				result = true;
+			}
+			if (returntype.Equals(typeof(System.Int32)))
+			{
+				result = true;
+			}
+			if (returntype.Equals(typeof(System.Int64)))
+			{
+				result = true;
+			}
+			if (returntype.Equals(typeof(System.Double)))
 			{
 				result = true;
 			}

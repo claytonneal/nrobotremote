@@ -156,6 +156,54 @@ namespace NRobotRemote.Test
             Assert.IsTrue(result["return"].GetType().Equals(typeof(System.Boolean)));
             Assert.IsTrue((Boolean)result["return"]);
         }
+        
+        [Test]
+        public void exec_returnint()
+        {
+            XmlRpcStruct result = _client.run_keyword("exec returnint", new object[0]);
+            Assert.IsTrue(result["return"].GetType().Equals(typeof(System.Int32)));
+            Assert.IsTrue((int)result["return"]==100);
+        }
+        
+        [Test]
+        public void exec_returnint32()
+        {
+            XmlRpcStruct result = _client.run_keyword("exec returnint32", new object[0]);
+            Assert.IsTrue(result["return"].GetType().Equals(typeof(System.Int32)));
+            Assert.IsTrue((int)result["return"]==100);
+        }
+        
+        [Test]
+        public void exec_returnlong()
+        {
+            XmlRpcStruct result = _client.run_keyword("exec returnlong", new object[0]);
+            Assert.IsTrue(result["return"].GetType().Equals(typeof(System.Int64)));
+            Assert.IsTrue((Int64)result["return"]==100);
+        }
+        
+        [Test]
+        public void exec_returnint64()
+        {
+            XmlRpcStruct result = _client.run_keyword("exec returnint64", new object[0]);
+            Assert.IsTrue(result["return"].GetType().Equals(typeof(System.Int64)));
+            Assert.IsTrue((Int64)result["return"]==100);
+        }
+        
+        [Test]
+        public void exec_returndouble()
+        {
+            XmlRpcStruct result = _client.run_keyword("exec returndouble", new object[0]);
+            Assert.IsTrue(result["return"].GetType().Equals(typeof(System.Double)));
+            Assert.IsTrue((Double)result["return"]==3.14);
+        }
+        
+        [Test]
+        public void exec_returnsysdouble()
+        {
+            XmlRpcStruct result = _client.run_keyword("exec returnsysdouble", new object[0]);
+            Assert.IsTrue(result["return"].GetType().Equals(typeof(System.Double)));
+            Assert.IsTrue((Double)result["return"]==3.14);
+        }
 		
 	}
 }
