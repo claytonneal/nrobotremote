@@ -31,7 +31,6 @@ namespace NRobotRemote.Test.Keywords
 
 #region invalid return value
 
-			public int intreturnvalue() { return 1; }
 			public object objectreturnvalue() { return new object(); }
 
 #endregion
