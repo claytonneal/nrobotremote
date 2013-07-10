@@ -61,7 +61,13 @@ namespace NRobotRemote.Test.Keywords
     public string exec_returnsnull() { return null; }
     public bool exec_returnfalse() { return false; }
 	public Boolean exec_returntrue() { return true; }
-
+	public int exec_returnint() { return 100; }
+	public Int32 exec_returnint32() { return 100; }
+	public long exec_returnlong() { return 100; }
+	public Int64 exec_returnint64() { return 100; }
+	public double exec_returndouble() { return 3.14; }
+	public Double exec_returnsysdouble() { return 3.14; }
+	
 #endregion
 
 #region methods for doc
