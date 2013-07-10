@@ -177,16 +177,16 @@ namespace NRobotRemote.Test
         public void exec_returnlong()
         {
             XmlRpcStruct result = _client.run_keyword("exec returnlong", new object[0]);
-            Assert.IsTrue(result["return"].GetType().Equals(typeof(System.Int64)));
-            Assert.IsTrue((Int64)result["return"]==100);
+            Assert.IsTrue(result["return"].GetType().Equals(typeof(System.String)));
+            Assert.IsTrue(Int64.Parse((String)result["return"])==100);
         }
         
         [Test]
         public void exec_returnint64()
         {
             XmlRpcStruct result = _client.run_keyword("exec returnint64", new object[0]);
-            Assert.IsTrue(result["return"].GetType().Equals(typeof(System.Int64)));
-            Assert.IsTrue((Int64)result["return"]==100);
+            Assert.IsTrue(result["return"].GetType().Equals(typeof(System.String)));
+            Assert.IsTrue(Int64.Parse((String)result["return"])==100);
         }
         
         [Test]
