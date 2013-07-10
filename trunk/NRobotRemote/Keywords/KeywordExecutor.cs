@@ -55,14 +55,18 @@ namespace NRobotRemote.Keywords
 			_timer.Start();
 			try 
 			{
-				if (method.ReturnParameter.Equals(typeof(void)))
+				if (method.ReturnParameter.ParameterType.Equals(typeof(void)))
 				{
 					method.Invoke(_instance, args);
 					kwresult.@return = "";
 				}
 				else
 				{
-					kwresult.@return = Convert.ToString(method.Invoke(_instance, args));
+					kwresult.@return = method.Invoke(_instance, args);
+					if (kwresult.@return==null)
+					{
+						kwresult.@return = "";
+					}
 				}
 				kwresult.status = "PASS";
 			}

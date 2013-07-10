@@ -31,13 +31,17 @@ namespace NRobotRemote.Keywords
 		{
 			Boolean result = false;
 			
-			//check return types (void, string)
+			//check return types (void, string, boolean)
 			Type returntype = mi.ReturnParameter.ParameterType;
 			if (returntype.Equals(typeof(void)))
 			{
 				result = true;
 			}
 			if (returntype.Equals(typeof(System.String)))
+			{
+				result = true;
+			}
+			if (returntype.Equals(typeof(System.Boolean)))
 			{
 				result = true;
 			}
