@@ -68,7 +68,7 @@ namespace NRobotRemote.Keywords
 						kwresult.@return = "";
 					}
 				}
-				kwresult.status = "PASS";
+				kwresult.status = KeywordStatus.PASS;
 			}
 			catch (Exception e)
 			{
@@ -83,7 +83,7 @@ namespace NRobotRemote.Keywords
 					kwresult.traceback = e.StackTrace;
 	﻿  ﻿  ﻿  ﻿  		kwresult.error = e.Message;
 				}
-				kwresult.status = "FAIL";
+				kwresult.status = KeywordStatus.FAIL;
 				kwresult.@return = "";
 			}
 			//stop timer

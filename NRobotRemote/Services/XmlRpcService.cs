@@ -86,11 +86,7 @@ namespace NRobotRemote.Services
 				try
 				{
 					var result = _service._keywordmap.Executor.ExecuteKeyword(keyword,args);
-					kr.Add("return",result.@return);
-					kr.Add("status",result.status);
-					kr.Add("error",result.error);
-					kr.Add("traceback",result.traceback);
-					kr.Add("output",result.output);
+					kr = result.ToRobotXmlRpcStruct();
 				}
 				catch (UnknownKeywordException e)
 				{
