@@ -89,12 +89,6 @@ namespace NRobotRemote.Test
             Assert.IsTrue(result.ToList().Contains("noreturnvalue".ToUpper()));
 		}
 		
-		[Test]
-		public void intreturnvalue()
-		{
-            String[] result = _client.get_keyword_names();
-            Assert.IsFalse(result.ToList().Contains("intreturnvalue".ToUpper()));
-		}
 		
 		[Test]
 		public void objectreturnvalue()
