@@ -13,7 +13,7 @@ Writing a keyword library is very simple.Create a new class library project in C
 Will be considered as keywords.
 *Note* _Static_ methods are not considered as keywords.
 
-The return type of String[] corresponds to robot framework list variables, the other return types are robot framework scalar variables.
+The return type of String[[]] corresponds to robot framework list variables, the other return types are robot framework scalar variables.
 
 == Example ==
 
