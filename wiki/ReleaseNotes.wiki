@@ -1,0 +1,6 @@
+#summary Release Notes
+
+= Release Notes =
+
+*11-Jul-2013 : Version 1.0.0 released*
+  * First official release
