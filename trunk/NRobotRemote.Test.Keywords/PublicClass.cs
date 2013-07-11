@@ -66,6 +66,7 @@ namespace NRobotRemote.Test.Keywords
 	public Int64 exec_returnint64() { return 100; }
 	public double exec_returndouble() { return 3.14; }
 	public Double exec_returnsysdouble() { return 3.14; }
+	public String[] exec_returnstringarray(string arg1, string arg2) { return new String[] {arg1, arg2}; }
 	
 #endregion
 

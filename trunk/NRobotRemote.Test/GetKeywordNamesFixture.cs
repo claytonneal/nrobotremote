@@ -79,7 +79,7 @@ namespace NRobotRemote.Test
 		public void stringarrayreturnvalue()
 		{
             String[] result = _client.get_keyword_names();
-            Assert.IsFalse(result.ToList().Contains("stringarrayreturnvalue".ToUpper()));
+            Assert.IsTrue(result.ToList().Contains("stringarrayreturnvalue".ToUpper()));
 		}
 		
 		[Test]

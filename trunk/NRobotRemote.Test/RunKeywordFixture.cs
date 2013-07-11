@@ -204,6 +204,17 @@ namespace NRobotRemote.Test
             Assert.IsTrue(result["return"].GetType().Equals(typeof(System.Double)));
             Assert.IsTrue((Double)result["return"]==3.14);
         }
+        
+        [Test]
+        public void exec_returnstringarray()
+        {
+        	XmlRpcStruct result = _client.run_keyword("exec returnstringarray", new String[] {"hello", "world"});
+        	Assert.IsTrue(result["return"].GetType().IsArray);
+        	Assert.IsTrue(result["return"].GetType().GetElementType().Equals(typeof(System.String)));
+        	var resarr = (String[])result["return"];
+        	Assert.IsTrue(resarr[0].Equals("hello"));
+        	Assert.IsTrue(resarr[1].Equals("world"));
+        }
 		
 	}
 }
