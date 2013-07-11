@@ -6,7 +6,7 @@
 
 Writing a keyword library is very simple.Create a new class library project in C#/Vb.net and add a _public_ class to the project. All public _instance_ methods of the class with:
 
-  * Return type = void, String, Boolean, Int32, Int64, Double, String[]
+  * Return type = void, String, Boolean, Int32, Int64, Double, String[[]]
   * No parameters
   * All parameters of type String
 
