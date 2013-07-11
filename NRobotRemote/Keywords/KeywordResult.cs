@@ -1,5 +1,6 @@
 ﻿using System;
 using CookComputing.XmlRpc;
+using System.Linq;
 
 namespace NRobotRemote.Keywords
 {
@@ -39,7 +40,14 @@ namespace NRobotRemote.Keywords
 		/// </summary>
 		public override string ToString()
 		{
-			return string.Format("[KeywordResult Status={0}, Output={1}, Return={2}, Error={3}, Traceback={4}, Duration={5}]", status, output, @return, error, traceback, duration);
+			//build return value string
+			String strReturn = @return.ToString();
+			if (@return.GetType().IsArray && @return.GetType().GetElementType().Equals(typeof(System.String)))
+			{
+				var retarr = (String[])@return;
+				strReturn = "[" + String.Join(",",retarr) + "]";
+			}
+			return string.Format("[KeywordResult Status={0}, Output={1}, Return={2}, Error={3}, Traceback={4}, Duration={5}]", status, output, strReturn, error, traceback, duration);
 		}
 		
 		/// <summary>
