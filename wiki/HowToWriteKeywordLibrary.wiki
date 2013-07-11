@@ -6,12 +6,14 @@
 
 Writing a keyword library is very simple.Create a new class library project in C#/Vb.net and add a _public_ class to the project. All public _instance_ methods of the class with:
 
-  * Return type = void, String, Boolean, Int32, Int64, Double
+  * Return type = void, String, Boolean, Int32, Int64, Double, String[]
   * No parameters
   * All parameters of type String
 
 Will be considered as keywords.
 *Note* _Static_ methods are not considered as keywords.
+
+The return type of String[] corresponds to robot framework list variables, the other return types are robot framework scalar variables.
 
 == Example ==
 
