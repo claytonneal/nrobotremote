@@ -25,17 +25,20 @@ namespace NRobotRemote.Services
 		private static readonly ILog log = LogManager.GetLogger(typeof(XmlRpcService));
 		
 		//properties
-		private RemoteService _service;
 		private const String CStopRemoteServer = "STOP REMOTE SERVER";
 		private const String CIntro = "__INTRO__";
 		private const String CInit = "__INIT__";
+		private RemoteService _service;
+		private KeywordMap _map;
 		
-﻿  ﻿  ﻿
-		public XmlRpcService(RemoteService service)
+		
+﻿  ﻿  	//constructor﻿
+		public XmlRpcService(RemoteService service) 
 		{
-			if (service==null) throw new Exception("No Service for XmlRpcService");
-			 _service = service;﻿
+			if (service==null) throw new Exception("No service specified to XmlRpcService constructor");
+			_service = service;
 		}
+
 ﻿  ﻿  
 	﻿  ﻿  /// <summary>
 	﻿  ﻿  /// Get a list of keywords available for use
@@ -45,7 +48,7 @@ namespace NRobotRemote.Services
 	﻿  ﻿  ﻿	try 
 			{
 				log.Debug("XmlRpc Method call - get_keyword_names");
-				var kwnames =  _service._keywordmap.GetKeywordNames();
+				var kwnames =  _map.GetKeywordNames();
 				kwnames.Add(CStopRemoteServer);
 				var result = kwnames.ToArray();
 				log.Debug("Method names are:");
@@ -85,7 +88,7 @@ namespace NRobotRemote.Services
 			{
 				try
 				{
-					var result = _service._keywordmap.Executor.ExecuteKeyword(keyword,args);
+					var result = _map.Executor.ExecuteKeyword(keyword,args);
 					kr = result.ToRobotXmlRpcStruct();
 				}
 				catch (UnknownKeywordException e)
@@ -114,7 +117,7 @@ namespace NRobotRemote.Services
 			}
 			try
 			{
-				return _service._keywordmap.GetKeyword(keyword).ArgumentNames;
+				return _map.GetKeyword(keyword).ArgumentNames;
 			}
 			catch (UnknownKeywordException e)
 			{
@@ -145,41 +148,34 @@ namespace NRobotRemote.Services
 			{
 				return "Raises event to stop the remote server in the server host";
 			}
-			if(_service._keyworddoc!=null)
+			try
 			{
-				try
+				//check for INTRO 
+				if (String.Equals(keyword,CIntro,StringComparison.CurrentCultureIgnoreCase))
 				{
-					//check for INTRO 
-					if (String.Equals(keyword,CIntro,StringComparison.CurrentCultureIgnoreCase))
-					{
-						return _service._keyworddoc.GetLibraryDoc();
-					}
-					//check for init
-					if (String.Equals(keyword,CInit,StringComparison.CurrentCultureIgnoreCase))
-					{
-						return String.Empty;    
-					}
-					//get keyword documentation
-					var kwd = _service._keywordmap.GetKeyword(keyword);
-					var doc =  _service._keyworddoc.GetMethodDoc(kwd.Method);
-					return doc;
+					return _map.GetLibraryDoc();
 				}
-				catch (UnknownKeywordException e)
+				//check for init
+				if (String.Equals(keyword,CInit,StringComparison.CurrentCultureIgnoreCase))
 				{
-					log.Error(String.Format("Exception in method - get_keyword_documentation : {0}",e.Message));
-					throw new XmlRpcUnknownKeywordException(e.Message);
+					return String.Empty;    
 				}
-				catch (Exception ee)
-				{
-					log.Error(String.Format("Exception in method - get_keyword_documentation : {0}",ee.Message));
-					throw new XmlRpcInternalErrorException(ee.Message);
-				}
+				//get keyword documentation
+				var kwd = _map.GetKeyword(keyword);
+				var doc =  _map.GetMethodDoc(kwd.Method);
+				return doc;
+			}
+			catch (UnknownKeywordException e)
+			{
+				log.Error(String.Format("Exception in method - get_keyword_documentation : {0}",e.Message));
+				throw new XmlRpcUnknownKeywordException(e.Message);
+			}
+			catch (Exception ee)
+			{
+				log.Error(String.Format("Exception in method - get_keyword_documentation : {0}",ee.Message));
+				throw new XmlRpcInternalErrorException(ee.Message);
+			}
 				
-			}
-			else
-			{
-				return String.Empty;
-			}
 	﻿  ﻿  }
 
 	﻿  	/// <summary>
@@ -198,6 +194,16 @@ namespace NRobotRemote.Services
 		{
 			System.Threading.Thread.Sleep(4000);
 			stop_remote_server();
+		}
+		
+		/// <summary>
+		/// Process xmlrpc request with a specific keyword map
+		/// </summary>
+		public void ProcessRequest(HttpListenerContext RequestContext, KeywordMap map)
+		{
+			if (map==null) throw new Exception("No keyword map for xmlrpc process");
+			_map = map;
+			base.ProcessRequest(RequestContext);
 		}
 	
 }

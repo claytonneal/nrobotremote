@@ -73,7 +73,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Doc\LibraryDoc.cs" />
     <Compile Include="Doc\XmlDocumentationExtensions.cs" />
     <Compile Include="IRemoteService.cs" />
     <Compile Include="IRemoteClient.cs" />
@@ -83,6 +82,7 @@
     <Compile Include="Keywords\KeywordExecutor.cs" />
     <Compile Include="Keywords\KeywordFactory.cs" />
     <Compile Include="Keywords\KeywordMap.cs" />
+    <Compile Include="Keywords\KeywordMapCollection.cs" />
     <Compile Include="Keywords\KeywordNameParser.cs" />
     <Compile Include="Keywords\KeywordResult.cs" />
     <Compile Include="Keywords\UnknownKeywordException.cs" />

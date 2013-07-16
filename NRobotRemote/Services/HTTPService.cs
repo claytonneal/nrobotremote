@@ -7,6 +7,8 @@ using System.Threading;
 using System.Net.NetworkInformation;
 using System.Collections.Specialized;
 using System.Reflection;
+using System.Text;
+using NRobotRemote.Keywords;
 
 namespace NRobotRemote.Services
 {
@@ -39,7 +41,7 @@ namespace NRobotRemote.Services
 			_service = service;
 			//setup http listener
 			_listener = new HttpListener();
-			﻿_﻿listener.Prefixes.Add(String.Format("http://127.0.0.1:{0}/", _service._config.port));
+			﻿_﻿listener.Prefixes.Add(String.Format("http://*:{0}/", _service._config.port));
 			_requests = new Queue<HttpListenerContext>();
             //set statuses
             _islistening = false;
@@ -103,7 +105,44 @@ namespace NRobotRemote.Services
 				if (_requests.Count > 0)
 				{
 					HttpListenerContext context = _requests.Dequeue();
-					_service._xmlrpcservice.ProcessRequest(context);
+					log.Debug(String.Format("Processing Http request for Url : {0}",context.Request.Url));
+					try
+					{
+						//check
+						if ((context.Request.Url.Segments==null)||(context.Request.Url.Segments.Length==0))
+						{
+							log.Warn(String.Format("Invalid url in request : {0}",context.Request.Url));
+							context.Response.StatusCode = 404;
+							context.Response.Close();
+						}
+						else
+						{
+							//get type from url
+							var type = context.Request.Url.Segments[1];
+							//check map
+							if (!_service._keywordmaps.ContainsMap(type))
+							{
+								log.Error(String.Format("No keyword map found for type : {0}",type));
+								context.Response.StatusCode = 404;
+								context.Response.Close();
+							}
+							else
+							{
+								//process request with keyword map
+								var map = _service._keywordmaps.GetMap(type);
+								_service._xmlrpcservice.ProcessRequest(context,map);
+							}
+							
+						}
+						
+					}
+					catch (Exception e)
+					{
+						log.Error(String.Format("Error in HTTP worker thread {0}",e.ToString()));
+						context.Response.StatusCode = 500;
+						context.Response.Close();
+					}
+					
 				}
 			}
 			_isprocessing = false;
@@ -185,9 +224,18 @@ namespace NRobotRemote.Services
         {
         	try
         	{
-        		string html = String.Format("<html><body><h1>NRobotRemote</h1><p><table><tr><td>Version</td><td>{0}</td></tr></table><h2>Available Keywords</h2>{1}</body>",Assembly.GetExecutingAssembly().GetName().Version,_service._keyworddoc.GetHTMLDoc());
-	        	response.StatusCode = 200;
-				byte[] buffer = System.Text.Encoding.UTF8.GetBytes(html);
+        		StringBuilder html = new StringBuilder();
+        		//setup html doc
+        		html.Append(String.Format("<html><body><h1>NRobotRemote</h1><p><table><tr><td>Version</td><td>{0}</td></tr></table><h2>Available Keywords</h2>",Assembly.GetExecutingAssembly().GetName().Version));
+	        	//per map html
+	        	foreach(KeywordMap map in _service._keywordmaps)
+	        	{
+	        		html.Append(map.GetHTMLDoc());
+	        	}
+	        	//finish html
+	        	html.Append("</body></html>");
+        		response.StatusCode = 200;
+        		byte[] buffer = System.Text.Encoding.UTF8.GetBytes(html.ToString());
 				response.OutputStream.Write(buffer,0,buffer.Length);
         	}
         	catch (Exception e)

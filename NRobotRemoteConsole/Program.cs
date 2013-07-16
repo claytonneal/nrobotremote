@@ -7,7 +7,6 @@ using System.Reflection;
 using log4net;
 using NRobotRemote;
 using System.Threading;
-using CommandLine;
 
 namespace NRobotRemoteConsole
 {
@@ -24,27 +23,23 @@ namespace NRobotRemoteConsole
 ﻿  ﻿  public static int Main(string[] args)
 ﻿  ﻿  {
 ﻿  ﻿  ﻿  
+		//log
+		Console.Title = "NRobotRemote";
+		log.Info(String.Format("NRobotRemote v{0}",Assembly.GetExecutingAssembly().GetName().Version));
 		try
 		{
-			//log
-			Console.Title = "NRobotRemote";
-			log.Info(String.Format("NRobotRemote v{0}",Assembly.GetExecutingAssembly().GetName().Version));
-	        
 			//get options
 			log.Debug("Parsing command line arguments");
-	        var options = new Options();
-	        if (CommandLine.Parser.Default.ParseArguments(args,options)) 
-	        {
+			var config = new RemoteServiceConfig(args);
 	        	
-	        	//start service
-				RemoteService srv = new RemoteService(options.library,options.type,options.port,options.docfile);
-				srv.StopRequested += OnStopHandler;
-				srv.StartAsync();
+	        //start service
+			RemoteService srv = new RemoteService(config);
+			srv.StopRequested += OnStopHandler;
+			srv.StartAsync();
 				
-				//wait
-				System.Threading.Thread.Sleep(Timeout.Infinite);
-				return 0;
-	        }
+			//wait
+			System.Threading.Thread.Sleep(Timeout.Infinite);
+			return 0;
 		}
 		catch (Exception e)
 		{
