@@ -12,10 +12,8 @@ The config file _NRobotRemoteConsole.exe.config_ is used for _log4net_ configura
 
 The following command line arguments are used:
 
-|| -l || --library || required || the path and name of the keyword assembly ||
-|| -t || --type || required || the class name of the keyword class ||
-|| -p || --port || required || the port number ||
-|| -d || --doc || optional || path and name of xml documentation file ||
+|| -p || the port number ||
+|| -k || specify the libraries, types, doc files to load. Multiple items in format _assembly:type:docfile_ where docfile is optional ||
 
 *NOTE* The _type_ name should include the namespace.
 
