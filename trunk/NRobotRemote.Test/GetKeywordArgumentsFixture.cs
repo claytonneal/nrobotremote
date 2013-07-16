@@ -20,6 +20,7 @@ namespace NRobotRemote.Test
 		private const String CPort = "8271";
 		private const String CDocFile = "";
 		private const String CType = "NRobotRemote.Test.Keywords.PublicClass";
+		private const String CUrl = "PublicClass";
 		
 		[TestFixtureSetUp]
 		public void fixture_setup()
@@ -29,7 +30,7 @@ namespace NRobotRemote.Test
 			_service.StartAsync();
 			//setup client proxy
 			_client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
-			_client.Url = "http://127.0.0.1:" + CPort + "/";
+			_client.Url = "http://127.0.0.1:" + CPort + "/" + CUrl;
 		}
 		
 		[TestFixtureTearDown]

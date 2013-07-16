@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Reflection;
 using log4net;
 using System.Linq;
+using System.Xml.Linq;
+using System.IO;
+using NRobotRemote.Doc;
+using System.Text;
 
 namespace NRobotRemote.Keywords
 {
@@ -21,7 +25,8 @@ namespace NRobotRemote.Keywords
 		private Type _type;
 		private Object _instance;
 		private KeywordExecutor _executor;
-		private RemoteService _service;
+		private XDocument _docxml;
+		private KeywordMapConfig _config;
 		
 		/// <summary>
 		/// Keyword executor for the map
@@ -49,19 +54,33 @@ namespace NRobotRemote.Keywords
 		/// <summary>
 		/// Constructor from assembly and type
 		/// </summary>
-		public KeywordMap(RemoteService service)
+		public KeywordMap(KeywordMapConfig config)
 		{
 			//check
-			if (service==null) throw new Exception("No service specified for KeywordMap");
-			_service = service;
-			if (String.IsNullOrEmpty(_service._config.library)) throw new ArgumentNullException("Unable to instanciate KeywordMap - no library specified");
-			if (String.IsNullOrEmpty(_service._config.type)) throw new ArgumentNullException("Unable to instanciate KeywordMap - no type specified");
-			_library = Assembly.LoadFrom(_service._config.library);
-			_type = _library.GetType(_service._config.type);
-			if (_type==null) throw new Exception(String.Format("Type {0} was not found",_service._config.type));
+			if (String.IsNullOrEmpty(config.Library)) throw new ArgumentNullException("Unable to instanciate KeywordMap - no library specified");
+			if (String.IsNullOrEmpty(config.Type)) throw new ArgumentNullException("Unable to instanciate KeywordMap - no type specified");
+			_config = config;
+			//build map
+			_library = Assembly.LoadFrom(_config.Library);
+			_type = _library.GetType(_config.Type);
+			if (_type==null) throw new Exception(String.Format("Type {0} was not found",_config.Type));
 			_instance = Activator.CreateInstance(_type);
 			_executor = new KeywordExecutor(this,_instance);
 			BuildMap();
+			//load doc
+			_docxml = null;
+			if (!String.IsNullOrEmpty(_config.DocFile)) 
+			{
+				if (File.Exists(_config.DocFile)) 
+				{
+					_docxml = XDocument.Load(_config.DocFile);
+					log.Debug(String.Format("XML Documentation file loaded : {0}",Path.GetFileName(_config.DocFile)));
+				}
+				else
+				{
+					throw new Exception(String.Format("Xml documentation file not found : {0}",_config.DocFile));
+				}
+			}
 		}
 		
 		/// <summary>
@@ -96,9 +115,8 @@ namespace NRobotRemote.Keywords
                 }
 			}
             if (_keywords.Count()==0) throw new Exception("No keywords found");
-            log.Debug(String.Format("{0} keywords added to map",_keywords.Count));
-            log.Debug("Keyword names are:");
-            log.Debug(String.Join(",",_keywords.Select(x => x.Value.Name)));
+            log.Debug(String.Format("{0} keywords added to map from type {1}",_keywords.Count,_type.Name));
+            log.Debug("Keyword names are: " + String.Join(",",_keywords.Select(x => x.Value.Name)));
 		}
 		
 		/// <summary>
@@ -145,7 +163,67 @@ namespace NRobotRemote.Keywords
 			return names.ToList();
 		}
 		
+		/// <summary>
+		/// Gets xml documentation for specified method
+		/// </summary>
+		public String GetMethodDoc(MethodInfo method)
+		{
+			if (_docxml!=null)
+			{
+				var doc = method.GetXmlDocumentation(_docxml);
+				log.Debug(String.Format("Documentation for method {0} : {1}",method.Name,doc));
+				return doc;
+			}
+			else
+			{
+				log.Warn("No xml documentation file loaded, returning empty string");
+				return String.Empty;
+			}
+		}
 		
+		/// <summary>
+		/// Gets xml documentation of the library class type
+		/// </summary>
+		/// <returns></returns>
+		public String GetLibraryDoc()
+		{
+			if (_docxml!=null)
+			{
+				var doc = _type.GetXmlDocumentation(_docxml);
+				log.Debug(String.Format("Documentation for library : {0}",doc));
+				return doc;	
+			}
+			else
+			{
+				log.Warn("No xml documentation file loaded, returning empty string");
+				return String.Empty;
+			}
+		}
+			
+		
+		/// <summary>
+		/// Gets a Html table for display of all keyword documentation
+		/// </summary>
+		public String GetHTMLDoc()
+		{
+			//setup
+			StringBuilder html = new StringBuilder();
+			html.Append("<h3>Keywords From : " + _type.Name + "</h3>");
+			html.Append("<table style=\"text-align: left; width: 90%;\" border=\"1\" cellpadding=\"1\" cellspacing=\"0\">");
+			html.Append("<thead><tr style=\" background-color: rgb(153, 153, 153)\">");
+			html.Append("<th>Keyword</th><th>Arguments</th><th>Description</th></tr>");
+			html.Append("</thead><tbody>");
+			var names = GetKeywordNames().ToArray();
+			Array.Sort(names);
+			foreach(String name in names)
+			{
+				html.Append(String.Format("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>",name,
+				                          String.Join(",",GetKeyword(name).ArgumentNames),
+				                          GetMethodDoc(GetKeyword(name).Method)));
+			}
+			html.Append("</tbody></table>");
+			return html.ToString();
+		}
 		
 	}
 }

@@ -5,6 +5,7 @@ using NRobotRemote.Keywords;
 using NRobotRemote.Services;
 using NRobotRemote.Doc;
 using System.Security.Principal;
+using System.Collections.Generic;
 
 namespace NRobotRemote
 {
@@ -20,8 +21,7 @@ namespace NRobotRemote
 		//properties
         internal HTTPService _httpservice;
         internal XmlRpcService _xmlrpcservice;
-        internal KeywordMap _keywordmap;
-        internal LibraryDoc _keyworddoc;
+        internal KeywordMapCollection _keywordmaps;
         internal RemoteServiceConfig _config;
         
         /// <summary>
@@ -32,9 +32,9 @@ namespace NRobotRemote
         
         
         /// <summary>
-        /// Constructor with direct arguments
+        /// Constructor for single library
         /// </summary>
-        public RemoteService(String Library, String Type, String Port, String Docfile = null) : this(new RemoteServiceConfig {library = Library, type = Type, port = int.Parse(Port), docfile = Docfile } )
+        public RemoteService(String Library, String Type, String Port, String Docfile = null) : this(new RemoteServiceConfig(Library,Type,Port,Docfile))
         {
         }
         
@@ -45,16 +45,17 @@ namespace NRobotRemote
 		{
 			//check
 			if (config==null) throw new ArgumentException("No configuration specified");
-			if (String.IsNullOrEmpty(config.library)) throw new ArgumentNullException("No library specified");
-			if (String.IsNullOrEmpty(config.type)) throw new ArgumentNullException("No Type specified");
-			if ((!String.IsNullOrEmpty(config.docfile))&&(!File.Exists(config.docfile))) throw new Exception("Documentation file not found");
-			if (!File.Exists(config.library)) throw new Exception("Library file not found");
+			if (config.GetConfigs().Count==0) throw new ArgumentException("No keyword map configurations");
+			if (config.port==0) throw new ArgumentException("No port specified");
 			_config = config;
-			log.Info(_config.ToString());
-			//setup keyword map
-			_keywordmap = new KeywordMap(this);
-			//setup documentator
-			_keyworddoc = new LibraryDoc(this);
+			//build keyword maps
+			log.Debug("Building keyword maps");
+			_keywordmaps = new KeywordMapCollection();
+			var configs = config.GetConfigs();
+			foreach(KeywordMapConfig mapconfig in configs)
+			{
+				_keywordmaps.Add(new KeywordMap(mapconfig));
+			}
 			//setup services
 			_xmlrpcservice = new XmlRpcService(this);
 			_httpservice = new HTTPService(this);

@@ -1,2 +1,2 @@
 cd ./build/
-NRobotRemoteConsole.exe --library NRobotRemote.Test.Keywords.dll --type NRobotRemote.Test.Keywords.PublicClass --port 8271 --doc NRobotRemote.Test.Keywords.xml
+NRobotRemoteConsole.exe -p 8271 -k NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.PublicClass:NRobotRemote.Test.Keywords.xml NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.FirstClass:NRobotRemote.Test.Keywords.xml NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.SecondClass:NRobotRemote.Test.Keywords.xml
