@@ -21,7 +21,19 @@ The following command line arguments are used:
 
 NRobotRemoteConsole can host multiple keyword types. These are exposed to robot framework XmlRpc at url:
 
-http://<host>:<port>/<typename>
+http://(host):(port)/(typename)
+
+*Example:*
+The following command line loads two keyword types from two different libraries:
+
+<code>
+NRobotRemoteConsole.exe -p 8271 -k UILibrary.dll:UILibrary.UIKeywords OracleLibrary.dll:OracleLibrary.OracleKeywords
+</code>
+
+The keywords are then exposed to robot framework at url's:
+
+  * http://localhost:8271/UIKeywords
+  * http://localhost:8271/OracleKeywords
 
 == Starting and Stopping ==
 
