@@ -17,7 +17,7 @@ namespace NRobotRemote.Keywords
 		public KeywordMap GetMap(String Typename)
 		{
 			if (String.IsNullOrEmpty(Typename)) throw new Exception("No Typename specified");
-			var match = this.FirstOrDefault(m => m.KeywordClassType.Name.Equals(Typename,StringComparison.CurrentCultureIgnoreCase));
+			var match = this.FirstOrDefault(m => m.KeywordClassType.FullName.Equals(Typename,StringComparison.CurrentCultureIgnoreCase));
 			if (match==null) throw new Exception(String.Format("No keyword map found for typename={0}",Typename));
 			return match;
 		}
@@ -30,7 +30,7 @@ namespace NRobotRemote.Keywords
 		public bool ContainsMap(String Typename)
 		{
 			if (String.IsNullOrEmpty(Typename)) return false;
-			var match = this.FirstOrDefault(m => m.KeywordClassType.Name.Equals(Typename,StringComparison.CurrentCultureIgnoreCase));
+			var match = this.FirstOrDefault(m => m.KeywordClassType.FullName.Equals(Typename,StringComparison.CurrentCultureIgnoreCase));
 			return !(match==null);
 		}
 		

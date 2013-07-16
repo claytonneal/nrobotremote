@@ -115,7 +115,7 @@ namespace NRobotRemote.Keywords
                 }
 			}
             if (_keywords.Count()==0) throw new Exception("No keywords found");
-            log.Debug(String.Format("{0} keywords added to map from type {1}",_keywords.Count,_type.Name));
+            log.Debug(String.Format("{0} keywords added to map from type {1}",_keywords.Count,_type.FullName));
             log.Debug("Keyword names are: " + String.Join(",",_keywords.Select(x => x.Value.Name)));
 		}
 		
@@ -208,7 +208,7 @@ namespace NRobotRemote.Keywords
 		{
 			//setup
 			StringBuilder html = new StringBuilder();
-			html.Append("<h3>Keywords From : " + _type.Name + "</h3>");
+			html.Append("<h3>Keywords From : " + _type.FullName + "</h3>");
 			html.Append("<table style=\"text-align: left; width: 90%;\" border=\"1\" cellpadding=\"1\" cellspacing=\"0\">");
 			html.Append("<thead><tr style=\" background-color: rgb(153, 153, 153)\">");
 			html.Append("<th>Keyword</th><th>Arguments</th><th>Description</th></tr>");
