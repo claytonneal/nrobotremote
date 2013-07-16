@@ -17,6 +17,12 @@ The following command line arguments are used:
 
 *NOTE* The _type_ name should include the namespace.
 
+=== Hosting Multiple Keyword Types ===
+
+NRobotRemoteConsole can host multiple keyword types. These are exposed to robot framework XmlRpc at url:
+
+http://<host>:<port>/<typename>
+
 == Starting and Stopping ==
 
 To start NRobotRemoteConsole.exe supply the above command line parameters. <br/>
