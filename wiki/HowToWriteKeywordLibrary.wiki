@@ -86,3 +86,6 @@ A keyword method is considered as FAIL (and will be shown in the robot framework
 
 *Can a keyword method return null?*<br/>
 Yes, if a methods return parameter type is _string_ the method can return null. Nullable int, bool, double arent supported
+
+*Should I compile as x86, x64, or AnyCPU?*<br/>
+Compile to the same as the instance of NRobotRemote that will be used. If your keyword library is x64, you will need x64 NRobotRemote
