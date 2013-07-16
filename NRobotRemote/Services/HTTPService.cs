@@ -117,8 +117,9 @@ namespace NRobotRemote.Services
 						}
 						else
 						{
-							//get type from url
-							var type = context.Request.Url.Segments[1];
+							//get full type name from url
+							var seg = context.Request.Url.Segments;
+							var type = String.Join("",seg,1,seg.Length-1).Replace("/",".");
 							//check map
 							if (!_service._keywordmaps.ContainsMap(type))
 							{

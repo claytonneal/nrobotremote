@@ -20,7 +20,7 @@ namespace NRobotRemote.Test
 		private const String CPort = "8271";
 		private const String CDocFile = "NRobotRemote.Test.Keywords.xml";
 		private const String CType = "NRobotRemote.Test.Keywords.PublicClass";
-		private const String CUrl = "PublicClass";
+		private const String CUrl = "NRobotRemote/Test/Keywords/PublicClass";
 		
 		[TestFixtureSetUp]
 		public void fixture_setup()

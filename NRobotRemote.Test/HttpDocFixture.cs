@@ -17,8 +17,6 @@ namespace NRobotRemote.Test
 
 		
 		private static RemoteService _service;
-		private static IRemoteClient _firstclient;
-		private static IRemoteClient _secondclient;
 		
 		//constants
 		private const String CLibrary = "NRobotRemote.Test.Keywords.dll";
@@ -36,11 +34,6 @@ namespace NRobotRemote.Test
 			config.AddKeywordConfig(new KeywordMapConfig() {Library = CLibrary, Type = CSecondType});
 			_service = new RemoteService(config);
 			_service.StartAsync();
-			//setup client proxies
-			_firstclient = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
-			_secondclient = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
-			_firstclient.Url = "http://127.0.0.1:8271/FirstClass";
-			_secondclient.Url = "http://127.0.0.1:8271/SecondClass";
 			
 		}
 		
@@ -68,8 +61,8 @@ namespace NRobotRemote.Test
             //assert content
         	Assert.IsTrue(responseText.Length > 0);
         	Assert.IsTrue(responseText.Contains("NRobotRemote"));
-        	Assert.IsTrue(responseText.Contains("FirstClass"));
-        	Assert.IsTrue(responseText.Contains("SecondClass"));
+        	Assert.IsTrue(responseText.Contains("NRobotRemote.Test.Keywords.FirstClass"));
+        	Assert.IsTrue(responseText.Contains("NRobotRemote.Test.Keywords.SecondClass"));
         	Assert.IsTrue(responseText.Contains("ADD"));
         	Assert.IsTrue(responseText.Contains("SUBTRACT"));
         	Assert.IsTrue(responseText.Contains("Adds two integers"));

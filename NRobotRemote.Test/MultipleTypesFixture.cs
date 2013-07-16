@@ -33,8 +33,8 @@ namespace NRobotRemote.Test
 			//setup client proxies
 			_firstclient = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
 			_secondclient = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
-			_firstclient.Url = "http://127.0.0.1:8271/FirstClass";
-			_secondclient.Url = "http://127.0.0.1:8271/SecondClass";
+			_firstclient.Url = "http://127.0.0.1:8271/NRobotRemote/Test/Keywords/FirstClass";
+			_secondclient.Url = "http://127.0.0.1:8271/NRobotRemote/Test/Keywords/SecondClass";
 			
 		}
 		
