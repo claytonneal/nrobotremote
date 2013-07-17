@@ -20,7 +20,7 @@ A library spec file is created using the robot framework libdoc tool. To use thi
 Example:
 
 <code>
-java -jar robotframework-2.8.1.jar libdoc --name TestLib Remote::localhost:8271/mytype TestLib.xml
+java -jar robotframework-2.8.1.jar libdoc --name TestLib Remote::localhost:8271/full/type/name TestLib.xml
 </code>
 
 == Giving RIDE the Library Spec File ==
