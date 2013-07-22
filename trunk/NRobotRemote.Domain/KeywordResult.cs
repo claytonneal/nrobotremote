@@ -1,8 +1,7 @@
 ﻿using System;
-using CookComputing.XmlRpc;
 using System.Linq;
 
-namespace NRobotRemote.Keywords
+namespace NRobotRemote.Domain
 {
 	
 	/// <summary>
@@ -17,6 +16,7 @@ namespace NRobotRemote.Keywords
 	/// <summary>
 	/// Result of keyword execution
 	/// </summary>
+	[Serializable]
 	public class KeywordResult
 	{
 		public KeywordResult() 
@@ -50,30 +50,6 @@ namespace NRobotRemote.Keywords
 			return string.Format("[KeywordResult Status={0}, Output={1}, Return={2}, Error={3}, Traceback={4}, Duration={5}]", status, output, strReturn, error, traceback, duration);
 		}
 		
-		/// <summary>
-		/// Converts keyword result to RF XmlRpc Structure
-		/// </summary>
-		public XmlRpcStruct ToRobotXmlRpcStruct()
-		{
-			var result = new XmlRpcStruct();
-			//add status
-			result.Add("status",this.status.ToString());
-			//add error, traceback, output
-			result.Add("error",this.error);
-			result.Add("traceback",this.traceback);
-			result.Add("output",this.output);
-			//add return
-			if (this.@return.GetType().Equals(typeof(System.Int64)))
-			{
-				//64bit int has to be returned as string
-				result.Add("return",this.@return.ToString());
-			}
-			else
-			{
-				result.Add("return",this.@return);
-			}
-			return result;
-		}
 
 	}
 }

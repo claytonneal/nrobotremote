@@ -34,6 +34,8 @@
     <Optimize>False</Optimize>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <StartAction>Project</StartAction>
+    <StartArguments>-p 8271 -k NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.PublicClass:NRobotRemote.Test.Keywords.xml</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\build\</OutputPath>
@@ -70,6 +72,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NRobotRemote.Config\NRobotRemote.Config.csproj">
+      <Project>{424523F2-7B26-48C2-AA5C-4804B234A489}</Project>
+      <Name>NRobotRemote.Config</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NRobotRemote\NRobotRemote.csproj">
       <Project>{1BD61A13-DA09-477A-8A42-4072681DF950}</Project>
       <Name>NRobotRemote</Name>

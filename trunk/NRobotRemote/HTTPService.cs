@@ -8,9 +8,9 @@ using System.Net.NetworkInformation;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Text;
-using NRobotRemote.Keywords;
+using NRobotRemote.Domain;
 
-namespace NRobotRemote.Services
+namespace NRobotRemote
 {
 	/// <summary>
 	/// HTTP Listener service
@@ -37,7 +37,7 @@ namespace NRobotRemote.Services
 		public HTTPService(RemoteService service)
 		{
 			//check
-			if (service==null) throw new Exception("Unable to instanciate HTTPService - Service instance specified");
+			if (service==null) throw new Exception("Unable to instanciate HTTPService - Service instance not specified");
 			_service = service;
 			//setup http listener
 			_listener = new HttpListener();
@@ -191,7 +191,7 @@ namespace NRobotRemote.Services
             while (_islistening) { }
             
             //stop processor
-            log.Debug("Stopping processor service");
+            log.Debug("Stopping http worker thread");
             _requests.Clear();
             _processorstop = true;
             _keywordthread.Join(Timeout.Infinite);

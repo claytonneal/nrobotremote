@@ -4,6 +4,7 @@ using NRobotRemote;
 using CookComputing.XmlRpc;
 using System.Linq;
 using System.Diagnostics;
+using NRobotRemote.Config;
 
 namespace NRobotRemote.Test
 {

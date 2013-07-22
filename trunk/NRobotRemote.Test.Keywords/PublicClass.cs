@@ -85,6 +85,12 @@ namespace NRobotRemote.Test.Keywords
 
 #endregion
 
+#region obsolete keywords
+
+	[Obsolete]
+	public void obsolete_keyword() { }
+
+#endregion
     
         }
 }

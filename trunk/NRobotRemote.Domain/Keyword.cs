@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Reflection;
-using log4net;
 using System.Diagnostics;
 using System.IO;
 
-namespace NRobotRemote.Keywords
+namespace NRobotRemote.Domain
 {
 	/// <summary>
 	/// Description of Keyword.
@@ -12,11 +11,9 @@ namespace NRobotRemote.Keywords
 	public class Keyword
 	{
 		
-		//private fields
+		//fields
 		private MethodInfo _method;
-		
-		//log4net
-		private static readonly ILog log = LogManager.GetLogger(typeof(Keyword));
+		public String _doc;
 		
 		/// <summary>
 		/// Get the keyword name
@@ -78,6 +75,7 @@ namespace NRobotRemote.Keywords
 			//check
 			if (method==null) throw new ArgumentNullException("Cannot instanciate keyword from null method");
 			_method = method;
+			_doc = String.Empty;
 		}
 		
 	}

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NRobotRemote.Keywords
+namespace NRobotRemote.Domain
 {
 	/// <summary>
 	/// Description of KeywordNameParser.
