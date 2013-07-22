@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
 using log4net;
-using NRobotRemote.Keywords;
-using NRobotRemote.Services;
-using NRobotRemote.Doc;
 using System.Security.Principal;
 using System.Collections.Generic;
+using NRobotRemote.Domain;
+using NRobotRemote.Config;
 
 namespace NRobotRemote
 {
@@ -43,24 +42,48 @@ namespace NRobotRemote
 		/// </summary>
 		public RemoteService(RemoteServiceConfig config)
 		{
-			//check
+			//check config
 			if (config==null) throw new ArgumentException("No configuration specified");
-			if (config.GetConfigs().Count==0) throw new ArgumentException("No keyword map configurations");
-			if (config.port==0) throw new ArgumentException("No port specified");
+			config.VerifyConfig();
 			_config = config;
-			//build keyword maps
-			log.Debug("Building keyword maps");
-			_keywordmaps = new KeywordMapCollection();
-			var configs = config.GetConfigs();
-			foreach(KeywordMapConfig mapconfig in configs)
-			{
-				_keywordmaps.Add(new KeywordMap(mapconfig));
-			}
 			//setup services
 			_xmlrpcservice = new XmlRpcService(this);
 			_httpservice = new HTTPService(this);
+			//setup collection
+			_keywordmaps = new KeywordMapCollection();
 		}
 		
+		/// <summary>
+		/// Loads the keyword libraries into app domains
+		/// </summary>
+		private void LoadKeywords()
+		{
+			//build keyword maps
+			log.Debug("Building keyword maps");
+			var configs = _config.GetConfigs();
+			try
+			{
+				foreach(KeywordMapConfig mapconfig in configs)
+				{
+					_keywordmaps.Add(KeywordDomainBuilder.CreateDomain(mapconfig));
+				}
+			}
+			catch (Exception e)
+			{
+				log.Error(String.Format("Unable to build keyword maps, {0}",e.Message));
+				UnLoadKeywords();
+				throw e;
+			}
+			
+		}
+		
+		/// <summary>
+		/// Unloads all keyword app domains
+		/// </summary>
+		private void UnLoadKeywords()
+		{
+			_keywordmaps.UnLoadMaps();
+		}
 		
 		
 		/// <summary>
@@ -74,6 +97,7 @@ namespace NRobotRemote
 				log.Error("Service not started as administrator");
 				throw new UnauthorizedAccessException("Service not started as administrator");
 			}
+			LoadKeywords();
 			_httpservice.StartAsync();
 		}
 		
@@ -83,6 +107,7 @@ namespace NRobotRemote
 		public void Stop()
 		{
 			_httpservice.Stop();
+			UnLoadKeywords();
 		}
 		
 		/// <summary>

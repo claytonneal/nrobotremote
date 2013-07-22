@@ -1,7 +1,10 @@
-﻿using NUnit.Framework;
+﻿using System.Configuration;
+using NUnit.Framework;
 using NRobotRemote;
 using System;
 using System.IO;
+using NRobotRemote.Config;
+using System.Configuration;
 
 namespace NRobotRemote.Test
 {
@@ -17,58 +20,74 @@ namespace NRobotRemote.Test
 		private const String CUrl = "PublicClass";
 		
 		[Test]
-		[ExpectedException(typeof(System.ArgumentNullException))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void nolibrary()
 		{
 			var server = new RemoteService(null,CType,CPort,null);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
-		[ExpectedException(typeof(System.IO.FileNotFoundException))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void librarynotfound()
 		{
 			var server = new RemoteService("c:\\randomlibrary.dll",CType,CPort,null);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
-		[ExpectedException(typeof(System.ArgumentNullException))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void noport()
 		{
 			var server = new RemoteService(CLibrary,CType,null,null);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
-		[ExpectedException(typeof(System.FormatException))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void nonnumericport()
 		{
 			var server = new RemoteService(CLibrary,CType,"notanumber",null);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
 		public void nodocfile()
 		{
 			var server = new RemoteService(CLibrary,CType,CPort,null);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
-		[ExpectedException(typeof(System.Exception))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void docfilenotfound()
 		{
 			var server = new RemoteService(CLibrary,CType,CPort,"c:\randomdocfile.xml");
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
-		[ExpectedException(typeof(System.ArgumentNullException))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void notype()
 		{
 			var server = new RemoteService(CLibrary,null,CPort,null);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
-		[ExpectedException(typeof(System.Exception))]
+		[ExpectedException(typeof(NRobotRemote.KeywordDomainException))]
 		public void unknowntype()
 		{
 			var server = new RemoteService(CLibrary,"Not a valid type",CPort,null);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
@@ -93,51 +112,61 @@ namespace NRobotRemote.Test
 		}
 		
 		[Test]
-		[ExpectedException(typeof(NRobotRemote.Keywords.DuplicateKeywordException))]
+		[ExpectedException(typeof(NRobotRemote.KeywordDomainException))]
 		public void duplicatekeywords()
 		{
 			var server = new RemoteService(CLibrary,"NRobotRemote.Test.Keywords.DuplicateMethod",CPort,null);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
-		[ExpectedException(typeof(System.ArgumentException))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void config_noport()
 		{
 			var config = new RemoteServiceConfig();
 			config.AddKeywordConfig(new KeywordMapConfig() {Library = CLibrary, Type = CType} );
-			var server = new RemoteService(config);	
+			var server = new RemoteService(config);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
-		[ExpectedException(typeof(System.Exception))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void config_notype()
 		{
 			var config = new RemoteServiceConfig();
 			config.AddKeywordConfig(new KeywordMapConfig() {Library = CLibrary, Type = CType} );
-			config.AddKeywordConfig(new KeywordMapConfig() {Library = CLibrary, Type = "Unknown.Type"} );
+			config.AddKeywordConfig(new KeywordMapConfig() {Library = CLibrary, Type = String.Empty} );
 			config.port = int.Parse(CPort);
 			var server = new RemoteService(config);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
-		[ExpectedException(typeof(System.IO.FileNotFoundException))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void config_nolibrary()
 		{
 			var config = new RemoteServiceConfig();
 			config.AddKeywordConfig(new KeywordMapConfig() {Library = CLibrary, Type = CType} );
-			config.AddKeywordConfig(new KeywordMapConfig() {Library = "c:\\unknown.dll", Type = "sometype"} );
+			config.AddKeywordConfig(new KeywordMapConfig() {Library = String.Empty, Type = "sometype"} );
 			config.port = int.Parse(CPort);
 			var server = new RemoteService(config);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
-		[ExpectedException(typeof(System.Exception))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void config_unknowndoc()
 		{
 			var config = new RemoteServiceConfig();
-			config.AddKeywordConfig(new KeywordMapConfig() {Library = CLibrary, Type = CType, DocFile="unkown.xml"} );
+			config.AddKeywordConfig(new KeywordMapConfig() {Library = CLibrary, Type = CType, DocFile="unknown.xml"} );
 			config.port = int.Parse(CPort);
 			var server = new RemoteService(config);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
@@ -149,34 +178,42 @@ namespace NRobotRemote.Test
 			config.AddKeywordConfig(new KeywordMapConfig() {Library = CLibrary, Type = CType} );
 			config.port = int.Parse(CPort);
 			var server = new RemoteService(config);
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
-		[ExpectedException(typeof(System.ArgumentException))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void cmdline_oneitem()
 		{
 			var cmdline = new String[] {"NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.PublicClass"};
 			var config = new RemoteServiceConfig(cmdline);
 			var server = new RemoteService(config);	
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		
 		[Test]
-		[ExpectedException(typeof(System.ArgumentException))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void cmdline_noport()
 		{
 			var cmdline = new String[] {"-k","NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.PublicClass"};
 			var config = new RemoteServiceConfig(cmdline);
 			var server = new RemoteService(config);	
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
-		[ExpectedException(typeof(System.ArgumentException))]
+		[ExpectedException(typeof(ConfigurationErrorsException))]
 		public void cmdline_nolibraries()
 		{
 			var cmdline = new String[] {"-p","8271"};
 			var config = new RemoteServiceConfig(cmdline);
 			var server = new RemoteService(config);	
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
@@ -185,6 +222,8 @@ namespace NRobotRemote.Test
 			var cmdline = new String[] {"-k","NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.PublicClass","-p","8271"};
 			var config = new RemoteServiceConfig(cmdline);
 			var server = new RemoteService(config);	
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
@@ -193,6 +232,8 @@ namespace NRobotRemote.Test
 			var cmdline = new String[] {"-k","NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.PublicClass:NRobotRemote.Test.Keywords.xml","-p","8271"};
 			var config = new RemoteServiceConfig(cmdline);
 			var server = new RemoteService(config);	
+			server.StartAsync();
+			server.Stop();
 		}
 		
 		[Test]
@@ -201,6 +242,8 @@ namespace NRobotRemote.Test
 			var cmdline = new String[] {"-k","NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.FirstClass:NRobotRemote.Test.Keywords.xml","NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.SecondClass:NRobotRemote.Test.Keywords.xml","-p","8271"};
 			var config = new RemoteServiceConfig(cmdline);
 			var server = new RemoteService(config);	
+			server.StartAsync();
+			server.Stop();
 		}
 		
 	}

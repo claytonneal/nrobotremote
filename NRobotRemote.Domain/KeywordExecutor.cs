@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Reflection;
 using System.Diagnostics;
-using log4net;
 using System.IO;
 
-namespace NRobotRemote.Keywords
+namespace NRobotRemote.Domain
 {
 	/// <summary>
 	/// Description of KeywordExecutor.
 	/// </summary>
 	public class KeywordExecutor
 	{
-		
-		//log4net
-		private static readonly ILog log = LogManager.GetLogger(typeof(Keyword));
 		
 		//keyword map
 		private KeywordMap _keywords;
@@ -42,7 +38,6 @@ namespace NRobotRemote.Keywords
 		public KeywordResult ExecuteKeyword(string name, object[] args)
 		{
 			//setup
-			log.Debug(String.Format("Executing keyword {0}",name));
 			var keyword = _keywords.GetKeyword(name);
 			var method = keyword.Method;
 			var kwresult = new KeywordResult();
@@ -95,7 +90,6 @@ namespace NRobotRemote.Keywords
             kwresult.output = System.Text.Encoding.Default.GetString(_tracecontent.ToArray());
             _tracecontent.SetLength(0);
             //finish
-            log.Debug(kwresult.ToString());
 			return kwresult;
 		}
 		

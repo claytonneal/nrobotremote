@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NRobotRemote.Keywords
+namespace NRobotRemote.Domain
 {
 	/// <summary>
 	/// Desctiption of InvalidKeywordArgumentsException.
 	/// </summary>
+	[Serializable]
 	public class InvalidKeywordArgumentsException : Exception, ISerializable
 	{
 		public InvalidKeywordArgumentsException()

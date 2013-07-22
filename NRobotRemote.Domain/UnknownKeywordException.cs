@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace NRobotRemote.Keywords
+namespace NRobotRemote.Domain
 {
 	/// <summary>
 	/// Desctiption of UnknownKeywordException.
 	/// </summary>
+	[Serializable]
 	public class UnknownKeywordException : Exception, ISerializable
 	{
 		public UnknownKeywordException()

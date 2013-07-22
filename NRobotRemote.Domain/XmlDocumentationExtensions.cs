@@ -10,7 +10,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 
 
-namespace NRobotRemote.Doc
+namespace NRobotRemote.Domain
 {
 
 	/// <summary>

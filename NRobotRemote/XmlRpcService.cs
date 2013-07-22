@@ -8,10 +8,9 @@ using System.Xml.XPath;
 using System.Threading; 
 using System.Diagnostics;
 using log4net;
-using NRobotRemote.Keywords;
-using NRobotRemote.Doc;
+using NRobotRemote.Domain;
 
-namespace NRobotRemote.Services
+namespace NRobotRemote
 {
 
 	/// <summary>
@@ -51,14 +50,13 @@ namespace NRobotRemote.Services
 				var kwnames =  _map.GetKeywordNames();
 				kwnames.Add(CStopRemoteServer);
 				var result = kwnames.ToArray();
-				log.Debug("Method names are:");
-				log.Debug(String.Join(",",result));
+				log.Debug(String.Format("Keyword names are {0}",String.Join(",",result)));
 				return result;
 			}
 			catch (Exception e)
 			{
 				log.Error(String.Format("Exception in method - get_keyword_names : {0}",e.Message));
-				throw new XmlRpcInternalErrorException(e.Message);
+				throw new XmlRpcFaultException(1,e.Message);
 			}
 	﻿  ﻿  }
 ﻿  ﻿  
@@ -67,7 +65,7 @@ namespace NRobotRemote.Services
 	﻿  ﻿  /// </summary>
 	﻿  ﻿  public XmlRpcStruct run_keyword(string keyword, object[] args)
 	  ﻿  ﻿{
-			log.Debug("XmlRpc Method call - run_keyword");
+			log.Debug(String.Format("XmlRpc Method call - run_keyword {0}",keyword));
 			XmlRpcStruct kr = new XmlRpcStruct();
 			//check for stop remote server
 			if (String.Equals(keyword,CStopRemoteServer,StringComparison.CurrentCultureIgnoreCase))
@@ -88,18 +86,14 @@ namespace NRobotRemote.Services
 			{
 				try
 				{
-					var result = _map.Executor.ExecuteKeyword(keyword,args);
-					kr = result.ToRobotXmlRpcStruct();
+					var result = _map.ExecuteKeyword(keyword,args);
+					log.Debug(result.ToString());
+					kr = XmlRpcResultBuilder.ToXmlRpcResult(result);
 				}
-				catch (UnknownKeywordException e)
+				catch (Exception e)
 				{
 					log.Error(String.Format("Exception in method - run_keyword : {0}",e.Message));
-					throw new XmlRpcUnknownKeywordException(e.Message);
-				}
-				catch (Exception ee)
-				{
-					log.Error(String.Format("Exception in method - run_keyword : {0}",ee.Message));
-					throw new XmlRpcInternalErrorException(ee.Message);
+					throw new XmlRpcFaultException(1,e.Message);
 				}
 			}
 			return kr;
@@ -110,24 +104,21 @@ namespace NRobotRemote.Services
 	﻿  ﻿  /// </summary>
 	﻿  ﻿  public string[] get_keyword_arguments(string keyword)
 	﻿  ﻿  {
-			log.Debug("XmlRpc Method call - get_keyword_arguments");
+			log.Debug(String.Format("XmlRpc Method call - get_keyword_arguments {0}",keyword));
 			if (String.Equals(keyword,CStopRemoteServer,StringComparison.CurrentCultureIgnoreCase))
 			{
 				return null;
 			}
 			try
 			{
-				return _map.GetKeyword(keyword).ArgumentNames;
+				var names = _map.GetKeywordArguments(keyword);
+				log.Debug(String.Format("Keyword arguments are, {0}",String.Join(",",names)));
+				return names;
 			}
-			catch (UnknownKeywordException e)
+			catch (Exception e)
 			{
 				log.Error(String.Format("Exception in method - get_keyword_arguments : {0}",e.Message));
-				throw new XmlRpcUnknownKeywordException(e.Message);
-			}
-			catch (Exception ee)
-			{
-				log.Error(String.Format("Exception in method - get_keyword_arguments : {0}",ee.Message));
-				throw new XmlRpcInternalErrorException(ee.Message);
+				throw new XmlRpcFaultException(1,e.Message);
 			}
 		
 			
@@ -142,7 +133,7 @@ namespace NRobotRemote.Services
 	﻿  ﻿  /// <returns>A documentation string for the given keyword.</returns>
 	﻿  ﻿  public string get_keyword_documentation(string keyword)
 	﻿  ﻿  {
-		﻿  ﻿ 	log.Debug("XmlRpc Method call - get_keyword_documentation");
+		﻿  ﻿ 	log.Debug(String.Format("XmlRpc Method call - get_keyword_documentation {0}",keyword));
 			//check for stop_remote_server
 			if (String.Equals(keyword,CStopRemoteServer,StringComparison.CurrentCultureIgnoreCase))
 			{
@@ -153,7 +144,10 @@ namespace NRobotRemote.Services
 				//check for INTRO 
 				if (String.Equals(keyword,CIntro,StringComparison.CurrentCultureIgnoreCase))
 				{
-					return _map.GetLibraryDoc();
+					var libdoc = _map._doc;
+					log.Debug(String.Format("Library documentation, {0}",libdoc));
+					return libdoc;
+					
 				}
 				//check for init
 				if (String.Equals(keyword,CInit,StringComparison.CurrentCultureIgnoreCase))
@@ -161,19 +155,14 @@ namespace NRobotRemote.Services
 					return String.Empty;    
 				}
 				//get keyword documentation
-				var kwd = _map.GetKeyword(keyword);
-				var doc =  _map.GetMethodDoc(kwd.Method);
+				var doc =  _map.GetKeywordDoc(keyword);
+				log.Debug(String.Format("Keyword documentation, {0}",doc));
 				return doc;
 			}
-			catch (UnknownKeywordException e)
+			catch (Exception e)
 			{
 				log.Error(String.Format("Exception in method - get_keyword_documentation : {0}",e.Message));
-				throw new XmlRpcUnknownKeywordException(e.Message);
-			}
-			catch (Exception ee)
-			{
-				log.Error(String.Format("Exception in method - get_keyword_documentation : {0}",ee.Message));
-				throw new XmlRpcInternalErrorException(ee.Message);
+				throw new XmlRpcFaultException(1,e.Message);
 			}
 				
 	﻿  ﻿  }

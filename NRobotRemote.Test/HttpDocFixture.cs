@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Web;
 using System.Text;
+using NRobotRemote.Config;
 
 namespace NRobotRemote.Test
 {

@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using NRobotRemote.Services;
 using CookComputing.XmlRpc;
 using System.Linq;
 using System.Diagnostics;
@@ -138,6 +137,13 @@ namespace NRobotRemote.Test
 		{
             String[] result = _client.get_keyword_names();
             Assert.IsFalse(result.ToList().Contains("publicstaticmethod".ToUpper()));
+		}
+		
+		[Test]
+		public void obsolete_keyword()
+		{
+			String[] result = _client.get_keyword_names();
+			Assert.IsFalse(result.ToList().Contains("obsolete keyword".ToUpper()));
 		}
 		
 	}

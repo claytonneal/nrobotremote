@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Reflection;
 
-namespace NRobotRemote.Keywords
+namespace NRobotRemote.Domain
 {
 	/// <summary>
-	/// Description of KeywordFactory.
+	/// Class to create a keyword from a method
 	/// </summary>
 	public class KeywordFactory
 	{
@@ -67,6 +67,22 @@ namespace NRobotRemote.Keywords
 			//check method access
 			if (mi.IsPublic) result = true;
 			if (mi.IsStatic) result = false;
+			//finish here if false
+			if (!result) return result;
+			
+			//check if obsolete
+			object[] methodattr = mi.GetCustomAttributes(false);
+			if (methodattr.Length > 0)
+			{
+				for(int j = 0; j < methodattr.Length; j++)
+				{
+					if (methodattr[j].GetType().Equals(typeof(ObsoleteAttribute)))
+					{
+						result = false;
+						break;
+					}
+				}
+			}
 			//finish here if false
 			if (!result) return result;
 			

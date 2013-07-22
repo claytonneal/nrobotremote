@@ -7,6 +7,7 @@ using System.Reflection;
 using log4net;
 using NRobotRemote;
 using System.Threading;
+using NRobotRemote.Config;
 
 namespace NRobotRemoteConsole
 {
