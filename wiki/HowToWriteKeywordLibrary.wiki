@@ -108,3 +108,6 @@ Yes, if a methods return parameter type is _string_ the method can return null. 
 
 *Should I compile as x86, x64, or AnyCPU?*<br/>
 Compile to the same as the instance of NRobotRemote that will be used. If your keyword library is x64, you will need x64 NRobotRemote
+
+*Is it possible to load keyword assemblies with conflicting dependencies?*<br/>
+Yes, each keyword assembly and its dependencies are loaded into a separate application domain.
