@@ -2,6 +2,11 @@
 
 = Release Notes =
 
+*23-Jul-2013 : Version 1.2.1*
+  * issue 14
+  * issue 16
+  * issue 17
+
 *22-Jul-2013 : Version 1.2.0*
   * issue 8
   * issue 12
