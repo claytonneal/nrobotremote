@@ -115,7 +115,7 @@ Yes, each keyword assembly and its dependencies are loaded into a separate appli
 For _instance_ and _static_ methods to be considered as keywords, the keyword class needs a default parameter-less constructor. A constructor is not needed for _static_ methods to be considered as keywords.
 
 *Can I install my keyword library into the GAC?*<br/>
-Yes, NRobotRemote can load keyword assemblies from the GAC by specifying the full assembly details (Name, Culture, Version, PublicKey). For example using NRobotRemoteConsole:
+Yes, NRobotRemote can load keyword assemblies from the GAC by specifying the full assembly details (Name, Culture, Version, PublicKey). For example using NRobotRemoteConsole to load System.IO.File class as a keyword library:
 <code>
 NRobotRemoteConsole.exe -k mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089:System.IO.File -p 8271
 </code>
