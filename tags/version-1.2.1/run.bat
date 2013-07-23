@@ -1,0 +1,2 @@
+cd ./build/
+NRobotRemoteConsole.exe -p 8271 -k NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.PublicClass:NRobotRemote.Test.Keywords.xml NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.FirstClass:NRobotRemote.Test.Keywords.xml NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.SecondClass:NRobotRemote.Test.Keywords.xml
