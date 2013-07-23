@@ -12,9 +12,9 @@ namespace NRobotRemote.Domain
 		/// <summary>
 		/// Creates a new keyword from a method, if cannot construct null returned
 		/// </summary>
-		public static Keyword CreateFromMethod(MethodInfo method)
+		public static Keyword CreateFromMethod(MethodInfo method, BuildMapOptions options)
 		{
-			if (HasValidSignature(method)) 
+			if (HasValidSignature(method, options)) 
 			{
 				return new Keyword(method);
 			}
@@ -27,7 +27,7 @@ namespace NRobotRemote.Domain
 		/// <summary>
 		/// Checks method signature for keyword suitability
 		/// </summary>
-		private static Boolean HasValidSignature(MethodInfo mi)
+		private static Boolean HasValidSignature(MethodInfo mi, BuildMapOptions options)
 		{
 			Boolean result = false;
 			
@@ -65,12 +65,17 @@ namespace NRobotRemote.Domain
 			if (!result) return result;
 			
 			//check method access
-			if (mi.IsPublic) result = true;
-			if (mi.IsStatic) result = false;
+			result = true;
+			if (!mi.IsPublic) result = false;
+			if (options == BuildMapOptions.OnlyStatic)
+			{
+				if (!mi.IsStatic) result = false;
+			}
 			//finish here if false
 			if (!result) return result;
 			
 			//check if obsolete
+			result = true;
 			object[] methodattr = mi.GetCustomAttributes(false);
 			if (methodattr.Length > 0)
 			{

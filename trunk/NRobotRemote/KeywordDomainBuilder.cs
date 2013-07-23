@@ -3,6 +3,8 @@ using System.Reflection;
 using log4net;
 using NRobotRemote.Domain;
 using NRobotRemote.Config;
+using System.IO;
+using System.Diagnostics;
 
 namespace NRobotRemote
 {
@@ -24,6 +26,7 @@ namespace NRobotRemote
 				//setup domain
 				var kwdomainsetup = new AppDomainSetup();
 				kwdomainsetup.ApplicationBase = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+				//create domain
 				var kwdomain = AppDomain.CreateDomain(config.Type,null,kwdomainsetup);
 	            //get remote builder instance      
 				var remotebuilder = (KeywordMapBuilder) kwdomain.CreateInstanceAndUnwrap("NRobotRemote.Domain", typeof(KeywordMapBuilder).FullName);
@@ -40,7 +43,6 @@ namespace NRobotRemote
 			}
 
 		}
-		
 		
 	}
 }

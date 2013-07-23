@@ -24,7 +24,6 @@ namespace NRobotRemote.Domain
 		public KeywordExecutor(KeywordMap map, object instance)
 		{
 			if (map==null) throw new ArgumentNullException("Unable to instanciate keyword executor - null keyword map");
-			if (instance==null) throw new ArgumentNullException("Unable to instanciate keyword executor - null instance");
 			_keywords = map;
 			_instance = instance;
 			_tracecontent = new MemoryStream();

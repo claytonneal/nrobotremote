@@ -64,16 +64,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyPathFixture.cs" />
     <Compile Include="GetKeywordArgumentsFixture.cs" />
     <Compile Include="GetKeywordDocumentationFixture.cs" />
     <Compile Include="GetKeywordNamesFixture.cs" />
     <Compile Include="HttpDocFixture.cs" />
     <Compile Include="KeywordNameResolutionFixture.cs" />
     <Compile Include="MultipleTypesFixture.cs" />
+    <Compile Include="NonPublicConstructorFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RobotServiceFixture.cs" />
     <Compile Include="RunKeywordFixture.cs" />
+    <Compile Include="StaticClassFixture.cs" />
     <Compile Include="StopRemoteServerFixture.cs" />
+    <Compile Include="SystemClassFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -64,9 +64,11 @@
   <ItemGroup>
     <Compile Include="DuplicateMethod.cs" />
     <Compile Include="FirstClass.cs" />
+    <Compile Include="NonPublicConstructor.cs" />
     <Compile Include="PublicClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecondClass.cs" />
+    <Compile Include="StaticClass.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
