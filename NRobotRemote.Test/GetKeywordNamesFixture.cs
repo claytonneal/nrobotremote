@@ -136,8 +136,30 @@ namespace NRobotRemote.Test
 		public void publicstaticmethod()
 		{
             String[] result = _client.get_keyword_names();
-            Assert.IsFalse(result.ToList().Contains("publicstaticmethod".ToUpper()));
+            Assert.IsTrue(result.ToList().Contains("publicstaticmethod".ToUpper()));
 		}
+		
+		[Test]
+		public void privatestaticmethod()
+		{
+            String[] result = _client.get_keyword_names();
+            Assert.IsFalse(result.ToList().Contains("privatestaticmethod".ToUpper()));
+		}
+		
+		[Test]
+		public void internalstaticmethod()
+		{
+            String[] result = _client.get_keyword_names();
+            Assert.IsFalse(result.ToList().Contains("internalstaticmethod".ToUpper()));
+		}
+		
+		[Test]
+		public void protectedstaticmethod()
+		{
+            String[] result = _client.get_keyword_names();
+            Assert.IsFalse(result.ToList().Contains("protectedstaticmethod".ToUpper()));
+		}
+		
 		
 		[Test]
 		public void obsolete_keyword()

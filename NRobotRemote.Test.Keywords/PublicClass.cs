@@ -26,6 +26,7 @@ namespace NRobotRemote.Test.Keywords
 			public string stringreturnvalue() { return String.Empty; }
 			public string[] stringarrayreturnvalue() { return new String[0];}
 			public void noreturnvalue() { }
+			public static void publicstaticmethod() { }
 	
 #endregion
 
@@ -42,12 +43,14 @@ namespace NRobotRemote.Test.Keywords
 
 #endregion
 
-#region non public instance methods
+#region non public methods
 
 			private void privatemethod() { }
 			internal void internalmethod() { }
 			protected void protectedmethod() { }
-			public static void publicstaticmethod() { }
+			private static void privatestaticmethod() { }
+			internal static void internalstaticmethod() { }
+			protected static void protectedstaticmethod() { }
 	
 #endregion
 

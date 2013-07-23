@@ -29,7 +29,7 @@ namespace NRobotRemote.Test
 		}
 		
 		[Test]
-		[ExpectedException(typeof(ConfigurationErrorsException))]
+		[ExpectedException(typeof(NRobotRemote.KeywordDomainException))]
 		public void librarynotfound()
 		{
 			var server = new RemoteService("c:\\randomlibrary.dll",CType,CPort,null);
@@ -240,6 +240,16 @@ namespace NRobotRemote.Test
 		public void cmdline_valid_multiple()
 		{
 			var cmdline = new String[] {"-k","NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.FirstClass:NRobotRemote.Test.Keywords.xml","NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.SecondClass:NRobotRemote.Test.Keywords.xml","-p","8271"};
+			var config = new RemoteServiceConfig(cmdline);
+			var server = new RemoteService(config);	
+			server.StartAsync();
+			server.Stop();
+		}
+		
+		[Test]
+		public void cmdline_gac_assembly()
+		{
+			var cmdline = new String[] {"-k","mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089:System.IO.File","-p","8271"};
 			var config = new RemoteServiceConfig(cmdline);
 			var server = new RemoteService(config);	
 			server.StartAsync();

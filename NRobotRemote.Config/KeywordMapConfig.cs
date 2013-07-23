@@ -41,7 +41,6 @@ namespace NRobotRemote.Config
 		{
 			if (String.IsNullOrEmpty(Library)) throw new ConfigurationErrorsException("No Library specified");
 			if (String.IsNullOrEmpty(Type)) throw new ConfigurationErrorsException("No Type specified");
-			if (!File.Exists(Library)) throw new ConfigurationErrorsException("Specified Library not found");
 			if (!String.IsNullOrEmpty(DocFile))
 			{
 				if (!File.Exists(DocFile)) throw new ConfigurationErrorsException("Specified documentation file not found");

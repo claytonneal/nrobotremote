@@ -48,7 +48,7 @@ namespace NRobotRemote.Domain
 		/// <summary>
 		/// Builds the keyword map
 		/// </summary>
-		internal void BuildMap()
+		internal void BuildMap(BuildMapOptions options)
 		{
 			_keywords = new Dictionary<String,Keyword>();
             var methods = _type.GetMethods().Where((mi) => mi.DeclaringType != typeof(object));
@@ -58,7 +58,7 @@ namespace NRobotRemote.Domain
                 {
             		try
             		{
-            			var keyword = KeywordFactory.CreateFromMethod(method);
+            			var keyword = KeywordFactory.CreateFromMethod(method, options);
             			if (keyword!=null) 
             			{
             				if (_keywords.ContainsKey(keyword.Name))

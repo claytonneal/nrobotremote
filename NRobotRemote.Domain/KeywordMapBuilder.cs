@@ -6,6 +6,17 @@ using NRobotRemote.Config;
 
 namespace NRobotRemote.Domain
 {
+	
+	/// <summary>
+	/// Options to use when building keyword map
+	/// </summary>
+	public enum BuildMapOptions
+	{
+		OnlyStatic,
+		StaticAndInstance
+	}
+	
+	
 	/// <summary>
 	/// Builds a keyword map instance
 	/// </summary>
@@ -16,22 +27,49 @@ namespace NRobotRemote.Domain
 		{
 		}
 		
+		//fields
+		private static KeywordMapConfig _config;
+		
 		public KeywordMap CreateMap(KeywordMapConfig config)
 		{
 			try
 			{
 				//check
+				_config = config;
 				if (String.IsNullOrEmpty(config.Library)) throw new ArgumentNullException("Unable to instanciate KeywordMap - no library specified");
 				if (String.IsNullOrEmpty(config.Type)) throw new ArgumentNullException("Unable to instanciate KeywordMap - no type specified");
 				var result = new KeywordMap();
 				result._config = config;
-				//build map
-				result._library = Assembly.LoadFrom(result._config.Library);
+				//load assembly
+				AppDomain.CurrentDomain.AssemblyResolve += KeywordAssemblyResolveHandler;
+				if (File.Exists(config.Library))
+				{
+					//load from path
+					result._library = Assembly.LoadFrom(result._config.Library);
+				}
+				else
+				{
+					//load from assembly name
+					result._library = Assembly.Load(result._config.Library);
+				}
 				result._type = result._library.GetType(result._config.Type);
 				if (result._type==null) throw new Exception(String.Format("Type {0} was not found",result._config.Type));
-				result._instance = Activator.CreateInstance(result._type);
-				result._executor = new KeywordExecutor(result,result._instance);
-				result.BuildMap();
+				//create instance
+				try
+				{
+					//if can create instance build map of instance and static methods
+					result._instance = Activator.CreateInstance(result._type);
+					result._executor = new KeywordExecutor(result,result._instance);
+					result.BuildMap(BuildMapOptions.StaticAndInstance);
+				}
+				catch
+				{
+					//if can't create instance create map of only static methods
+					result._instance = null;
+					result._executor = new KeywordExecutor(result,null);
+					result.BuildMap(BuildMapOptions.OnlyStatic);
+				}
+				
 				//load xml doc
 				XDocument xmldoc = null;
 				if (!String.IsNullOrEmpty(result._config.DocFile)) 
@@ -62,6 +100,36 @@ namespace NRobotRemote.Domain
 			{
 				throw new Exception(e.Message);
 			}
+		}
+		
+		/// <summary>
+		/// Handles AssemblyResolve event
+		/// This is needed if keyword assembly has dependencies
+		/// We attempt to load assembly from same directory as the keyword assembly
+		/// </summary>
+		public static Assembly KeywordAssemblyResolveHandler(object source, ResolveEventArgs e)
+		{
+			try
+			{
+				Assembly result = null;
+				//check if library specified includes a path
+				if (_config.Library.Contains("\\"))
+				{
+					var libpath = Path.GetDirectoryName(_config.Library);
+					if (!String.IsNullOrEmpty(libpath))
+					{
+						var asmname = new AssemblyName(e.Name);
+						var asmpath = Path.Combine(libpath,asmname.Name);
+						result= Assembly.LoadFrom(asmpath);
+					}
+				}
+				return result;
+			}
+			catch
+			{
+				return null;
+			}
+			
 		}
 		
 		
