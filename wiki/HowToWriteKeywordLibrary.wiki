@@ -4,14 +4,13 @@
 
 <wiki:toc max_depth="3" />
 
-Writing a keyword library is very simple.Create a new class library project in C#/Vb.net and add a _public_ class to the project. All public _instance_ methods of the class with:
+Writing a keyword library is very simple.Create a new class library project in C#/Vb.net and add a _public_ class to the project. All public _instance_ or _static_ methods of the class with:
 
   * Return type = void, String, Boolean, Int32, Int64, Double, String[[]]
   * No parameters
   * All parameters of type String
 
 Will be considered as keywords.
-*Note* _Static_ methods are not considered as keywords.
 
 The return type of String[[]] corresponds to robot framework list variables, the other return types are robot framework scalar variables.
 
@@ -111,3 +110,12 @@ Compile to the same as the instance of NRobotRemote that will be used. If your k
 
 *Is it possible to load keyword assemblies with conflicting dependencies?*<br/>
 Yes, each keyword assembly and its dependencies are loaded into a separate application domain.
+
+*What constructor do I need in my keyword class?*<br/>
+For _instance_ and _static_ methods to be considered as keywords, the keyword class needs a default parameter-less constructor. A constructor is not needed for _static_ methods to be considered as keywords.
+
+*Can I install my keyword library into the GAC?*<br/>
+Yes, NRobotRemote can load keyword assemblies from the GAC by specifying the full assembly details (Name, Culture, Version, PublicKey). For example using NRobotRemoteConsole:
+<code>
+NRobotRemoteConsole.exe -k mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089:System.IO.File -p 8271
+</code>
