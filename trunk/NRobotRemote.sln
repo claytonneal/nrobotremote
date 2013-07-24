@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRobotRemote.Domain", "NRob
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRobotRemote.Config", "NRobotRemote.Config\NRobotRemote.Config.csproj", "{424523F2-7B26-48C2-AA5C-4804B234A489}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRobotRemoteTray", "NRobotRemoteTray\NRobotRemoteTray.csproj", "{15B08486-71F7-4441-8E2D-1C90DC2A8DBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,14 @@ Global
 		{424523F2-7B26-48C2-AA5C-4804B234A489}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{424523F2-7B26-48C2-AA5C-4804B234A489}.Release|x86.Build.0 = Release|Any CPU
 		{424523F2-7B26-48C2-AA5C-4804B234A489}.Release|x86.ActiveCfg = Release|Any CPU
+		{15B08486-71F7-4441-8E2D-1C90DC2A8DBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15B08486-71F7-4441-8E2D-1C90DC2A8DBA}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{15B08486-71F7-4441-8E2D-1C90DC2A8DBA}.Debug|x86.Build.0 = Debug|Any CPU
+		{15B08486-71F7-4441-8E2D-1C90DC2A8DBA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{15B08486-71F7-4441-8E2D-1C90DC2A8DBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15B08486-71F7-4441-8E2D-1C90DC2A8DBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15B08486-71F7-4441-8E2D-1C90DC2A8DBA}.Release|x86.Build.0 = Release|Any CPU
+		{15B08486-71F7-4441-8E2D-1C90DC2A8DBA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

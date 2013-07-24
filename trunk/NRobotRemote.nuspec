@@ -5,7 +5,7 @@
         <version>1.2.1</version>
         <authors>ClaytonNeal</authors>
 		<projectUrl>http://code.google.com/p/nrobotremote/</projectUrl>
-		<iconUrl>http://code.google.com/p/nrobotremote/logo?cct=1374068174</iconUrl>
+		<iconUrl>http://code.google.com/p/nrobotremote/logo?cct=1374673462</iconUrl>
         <description>.Net Robot Framework remote server</description>
         <tags>robotframework robot framework test automation</tags>
         <language>en-US</language>
@@ -22,5 +22,7 @@
 		<file src="build\NRobotRemote.dll" target="lib\net40"/>
 		<file src="build\NRobotRemote.Domain.dll" target="lib\net40"/>
 		<file src="build\NRobotRemoteConsole.exe.config" target="lib\net40"/>
+		<file src="build\NRobotRemoteTray.exe" target="lib\net40" />
+		<file src="build\NRobotRemoteTray.exe.config" target="lib\net40" />
 	</files>
 </package>
