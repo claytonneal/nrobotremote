@@ -1,0 +1,55 @@
+#summary Using the desktop tray application
+
+== Introduction ==
+
+NRoboteRemoteTray is a desktop tray application that hosts the NRobotRemote Robot Framework remote server. It can be used as an alternative to NRobotRemoteConsole.
+
+== Configuration ==
+
+NRobotRemotTray is configured using the .config file _NRobotRemoteTray.exe.config_, in this file the _port_ number of the service, and the keyword assemblies, types and xml documentation files can be defined. An example is shown below:
+
+<code>
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+ 
+  <configSections>
+ 
+    <section name="NRobotRemoteConfiguration" type="NRobotRemote.Config.NRobotRemoteConfiguration, NRobotRemote.Config" />
+ 
+  </configSections>
+	
+  <NRobotRemoteConfiguration>
+ 
+    <port number="8271" />
+ 
+      <assemblies>
+ 
+        <add name="NRobotRemote.Test.Keywords" type="NRobotRemote.Test.Keywords.PublicClass" docfile="NRobotRemote.Test.Keywords.xml" />
+ 
+        <add name="NRobotRemote.Test.Keywords" type="NRobotRemote.Test.Keywords.FirstClass" />
+ 
+      </assemblies>
+ 
+   </NRobotRemoteConfiguration>
+ 
+</configuration>
+
+</code>
+
+|| *Element* || *Description* ||
+|| port || Defines the port number the service will listen on ||
+|| assemblies || Defines the keyword assembly, keyword type name and optionally the xml documentation file. The assembly name can be a path to the assembly or the full name of the assembly if in the GAC. ||
+
+== Starting ==
+
+To start NRobotRemoteTray double click on _NRobotRemoteTray.exe_, the application will start and the icon will be visible in the application tray (near the system clock on Windows 7).
+
+== Context Menu ==
+
+Right clicking on the tray icon gives the following options:
+
+|| *Option* || *Description* ||
+|| Keywords || Opens the browser to the NRobotRemote service address, which lists all the keywords available. ||
+|| About || Displays the About form ||
+|| Exit || Exits the application ||
+
