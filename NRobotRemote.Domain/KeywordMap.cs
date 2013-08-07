@@ -5,6 +5,7 @@ using System.Linq;
 using System.IO;
 using System.Text;
 using NRobotRemote.Config;
+using System.Runtime.Remoting.Lifetime;
 
 namespace NRobotRemote.Domain
 {
@@ -187,6 +188,18 @@ namespace NRobotRemote.Domain
 			var kwd = GetKeyword(keyword);
 			return kwd._doc;
 				
+		}
+		
+		/// <summary>
+		/// Setup remote lease never to expire
+		/// </summary>
+		/// <returns></returns>
+		public override object InitializeLifetimeService()
+		{
+			ILease lease = (ILease)base.InitializeLifetimeService();
+			//Set lease properties
+			lease.InitialLeaseTime = TimeSpan.Zero;
+			return lease;
 		}
 		
 	}

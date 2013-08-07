@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using NRobotRemote;
 using NRobotRemote.Config;
+using log4net;
 
 namespace NRobotRemoteTray
 {
@@ -13,12 +14,17 @@ namespace NRobotRemoteTray
 	/// </summary>
 	internal sealed class Program
 	{
+		
+		//log4net
+		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+		
 		/// <summary>
 		/// Program entry point.
 		/// </summary>
 		[STAThread]
 		private static void Main(string[] args)
 		{
+			log.Debug("Starting NRobotRemoteTray");
 			var trayapp = new TrayApplication();
 			if (trayapp.IsRunning)
 			{
