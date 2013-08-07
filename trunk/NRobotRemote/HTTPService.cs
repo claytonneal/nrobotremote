@@ -241,6 +241,7 @@ namespace NRobotRemote
         	}
         	catch (Exception e)
         	{
+        		log.Error(e.ToString());
         		response.StatusCode = 500;
         	}
         	response.Close();
