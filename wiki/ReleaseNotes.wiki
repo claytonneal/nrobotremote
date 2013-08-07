@@ -8,3 +8,4 @@
 || 1.2.0 || 22-Jul-2013 || issue 8, issue 12, issue 13 ||
 || 1.2.1 || 23-Jul-2013 || issue 14, issue 16, issue 17 ||
 || 1.2.2 || 24-Jul-2013 || issue 19, issue 20, issue 21 ||
+|| 1.2.3 || 07-Aug-2013 || issue 22, issue 23, issue 25, issue 26 ||
