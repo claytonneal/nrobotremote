@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Net;
 using CookComputing.XmlRpc;
 using log4net;
@@ -26,10 +27,9 @@ namespace NRobotRemote
 		private HttpListener _listener;
 		private Thread _httpthread;
 		private Thread _keywordthread;
-		private Queue<HttpListenerContext> _requests;
+		private BlockingCollection<HttpListenerContext> _requests;
 		private volatile Boolean _isprocessing;
 		private volatile Boolean _islistening;
-		private volatile Boolean _processorstop;
 		
 		/// <summary>
 		/// Constructor
@@ -42,7 +42,6 @@ namespace NRobotRemote
 			//setup http listener
 			_listener = new HttpListener();
 			﻿_﻿listener.Prefixes.Add(String.Format("http://*:{0}/", _service._config.port));
-			_requests = new Queue<HttpListenerContext>();
             //set statuses
             _islistening = false;
             _isprocessing = false;
@@ -65,9 +64,10 @@ namespace NRobotRemote
 					log.Debug(String.Format("Received Http request with method {0}",method));
 					if (method == "DELETE")
 					{
-						log.Debug("Http request to close listener");
+						log.Debug("Http request to close");
 						reqcontext.Response.StatusCode = 200;
 						reqcontext.Response.Close();
+						_requests.Add(reqcontext);
 						break;
 					}
 					else 
@@ -75,7 +75,7 @@ namespace NRobotRemote
 						if (method == "POST")
 						{
 						    log.Debug("Http request added to processor queue");
-                    		_requests.Enqueue(reqcontext); 
+                    		_requests.Add(reqcontext); 
 						}
 						else
 						{
@@ -100,54 +100,60 @@ namespace NRobotRemote
 		private void DoWork_Processor()
 		{
 			_isprocessing = true;
-			while (!_processorstop)
+			while (true)
 			{
-				if (_requests.Count > 0)
+
+				//block until request to process
+				HttpListenerContext context = _requests.Take();
+				
+				//check for stop
+				var method = context.Request.HttpMethod;
+				if (method == "DELETE")
 				{
-					HttpListenerContext context = _requests.Dequeue();
-					log.Debug(String.Format("Processing Http request for Url : {0}",context.Request.Url));
-					try
+					break;
+				}
+				
+				log.Debug(String.Format("Processing Http request for Url : {0}",context.Request.Url));
+				try
+				{
+					//check
+					if ((context.Request.Url.Segments==null)||(context.Request.Url.Segments.Length==0))
 					{
-						//check
-						if ((context.Request.Url.Segments==null)||(context.Request.Url.Segments.Length==0))
+						log.Warn(String.Format("Invalid url in request : {0}",context.Request.Url));
+						context.Response.StatusCode = 404;
+						context.Response.Close();
+					}
+					else
+					{
+						//get full type name from url
+						var seg = context.Request.Url.Segments;
+						var type = String.Join("",seg,1,seg.Length-1).Replace("/",".");
+						//check map
+						if (!_service._keywordmaps.ContainsMap(type))
 						{
-							log.Warn(String.Format("Invalid url in request : {0}",context.Request.Url));
+							log.Error(String.Format("No keyword map found for type : {0}",type));
 							context.Response.StatusCode = 404;
 							context.Response.Close();
 						}
 						else
 						{
-							//get full type name from url
-							var seg = context.Request.Url.Segments;
-							var type = String.Join("",seg,1,seg.Length-1).Replace("/",".");
-							//check map
-							if (!_service._keywordmaps.ContainsMap(type))
-							{
-								log.Error(String.Format("No keyword map found for type : {0}",type));
-								context.Response.StatusCode = 404;
-								context.Response.Close();
-							}
-							else
-							{
-								//process request with keyword map
-								var map = _service._keywordmaps.GetMap(type);
-								_service._xmlrpcservice.ProcessRequest(context,map);
-							}
-							
+							//process request with keyword map
+							var map = _service._keywordmaps.GetMap(type);
+							_service._xmlrpcservice.ProcessRequest(context,map);
 						}
 						
 					}
-					catch (Exception e)
-					{
-						log.Error(String.Format("Error in HTTP worker thread {0}",e.ToString()));
-						context.Response.StatusCode = 500;
-						context.Response.Close();
-					}
 					
 				}
+				catch (Exception e)
+				{
+					log.Error(String.Format("Error in HTTP worker thread {0}",e.ToString()));
+					context.Response.StatusCode = 500;
+					context.Response.Close();
+				}
+					
 			}
 			_isprocessing = false;
-			_processorstop = false;
 		}
 		
 		/// <summary>
@@ -158,6 +164,7 @@ namespace NRobotRemote
 			if (!_islistening)
 			{
                 if (IsPortInUse()) throw new Exception("Unable to start service, port already in use");
+                _requests = new BlockingCollection<HttpListenerContext>();
                 _httpthread = new Thread(DoWork_Listener);
             	_httpthread.IsBackground = true;
                 _httpthread.Start();
@@ -182,7 +189,7 @@ namespace NRobotRemote
 			if (_islistening)
 			{
 				//send DELETE method call
-                log.Debug("Sending HTTP request to stop listener service");
+                log.Debug("Sending HTTP request to stop");
                 WebRequest stopreq = WebRequest.Create(String.Format("http://127.0.0.1:{0}/", _service._config.port));
                 stopreq.Method = "DELETE";
                 WebResponse resp = stopreq.GetResponse();
@@ -191,11 +198,10 @@ namespace NRobotRemote
             while (_islistening) { }
             
             //stop processor
-            log.Debug("Stopping http worker thread");
-            _requests.Clear();
-            _processorstop = true;
+            log.Debug("Waiting for http worker thread");
             _keywordthread.Join(Timeout.Infinite);
             while (_isprocessing) { }
+            _requests.Dispose();
 
 		}
 
