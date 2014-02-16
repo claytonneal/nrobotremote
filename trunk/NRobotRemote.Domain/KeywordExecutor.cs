@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Diagnostics;
 using System.IO;
+using NRobotRemote.Exceptions;
 
 namespace NRobotRemote.Domain
 {
@@ -64,21 +65,13 @@ namespace NRobotRemote.Domain
 				}
 				kwresult.status = KeywordStatus.PASS;
 			}
+			catch (TargetInvocationException ie)
+			{
+				kwresult.CaptureException(ie.InnerException);
+			}
 			catch (Exception e)
 			{
-				//invoke exception, inner exception gives keyword exception
-				if (e.InnerException!=null)
-				{
-					kwresult.traceback = e.InnerException.StackTrace;
-	﻿  ﻿  ﻿  ﻿  		kwresult.error = e.InnerException.Message;
-				}
-				else
-				{
-					kwresult.traceback = e.StackTrace;
-	﻿  ﻿  ﻿  ﻿  		kwresult.error = e.Message;
-				}
-				kwresult.status = KeywordStatus.FAIL;
-				kwresult.@return = "";
+				kwresult.CaptureException(e);
 			}
 			//stop timer
 			_timer.Stop();

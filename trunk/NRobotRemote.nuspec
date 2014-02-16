@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>NRobotRemote</id>
-        <version>1.2.4</version>
+        <version>1.2.5</version>
         <authors>ClaytonNeal</authors>
 		<projectUrl>http://code.google.com/p/nrobotremote/</projectUrl>
 		<iconUrl>http://code.google.com/p/nrobotremote/logo?cct=1374673462</iconUrl>
@@ -21,6 +21,7 @@
 		<file src="build\NRobotRemote.Config.dll" target="lib\net40"/>
 		<file src="build\NRobotRemote.dll" target="lib\net40"/>
 		<file src="build\NRobotRemote.Domain.dll" target="lib\net40"/>
+		<file src="build\NRobotRemote.Exceptions.dll" target="lib\net40"/>
 		<file src="build\NRobotRemoteConsole.exe.config" target="lib\net40"/>
 		<file src="build\NRobotRemoteTray.exe" target="lib\net40" />
 		<file src="build\NRobotRemoteTray.exe.config" target="lib\net40" />

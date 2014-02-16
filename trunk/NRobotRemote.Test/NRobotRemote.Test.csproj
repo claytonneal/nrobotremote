@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyPathFixture.cs" />
+    <Compile Include="ExcetptionTypesFixture.cs" />
     <Compile Include="GetKeywordArgumentsFixture.cs" />
     <Compile Include="GetKeywordDocumentationFixture.cs" />
     <Compile Include="GetKeywordNamesFixture.cs" />
@@ -87,6 +88,10 @@
     <ProjectReference Include="..\NRobotRemote.Config\NRobotRemote.Config.csproj">
       <Project>{424523F2-7B26-48C2-AA5C-4804B234A489}</Project>
       <Name>NRobotRemote.Config</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NRobotRemote.Exceptions\NRobotRemote.Exceptions.csproj">
+      <Project>{9E46A153-4C5E-4F4F-9083-5E4569A21130}</Project>
+      <Name>NRobotRemote.Exceptions</Name>
     </ProjectReference>
     <ProjectReference Include="..\NRobotRemote\NRobotRemote.csproj">
       <Project>{1BD61A13-DA09-477A-8A42-4072681DF950}</Project>
