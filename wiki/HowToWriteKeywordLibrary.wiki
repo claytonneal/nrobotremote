@@ -68,8 +68,8 @@ A keyword method can be marked as Deprecated or Obsolete by using the Obsolete a
 
 AS of Robot Framework 2.8, a keyword can return continuable and fatal errors. To return one of these error types they keyword must throw one of the following exception types:
 
-*  ContinuableKeywordException
-*  FatalKeywordException
+  * ContinuableKeywordException
+  * FatalKeywordException
 
 These exception types are defined in assembly NRobotRemote.Exceptions. This can be added as a reference in the keyword assembly.
 
