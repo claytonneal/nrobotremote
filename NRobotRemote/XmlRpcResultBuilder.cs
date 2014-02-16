@@ -32,6 +32,20 @@ namespace NRobotRemote
 			{
 				result.Add("return",kwresult.@return);
 			}
+			//check error type
+			if (kwresult.status==KeywordStatus.FAIL)
+			{
+				if (kwresult.errortype==KeywordErrorTypes.Continuable)
+				{
+					//continuable error
+					result.Add("continuable",true);
+				}
+				if (kwresult.errortype==KeywordErrorTypes.Fatal)
+				{
+					//fatal error
+					result.Add("fatal",true);
+				}
+			}
 			return result;
 		}
 		
