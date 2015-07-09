@@ -19,8 +19,6 @@ NRobotRemote is a .Net based Robot Framework remote server. It can be used to ho
 
 # How To Write a Keyword Library #
 
-
-
 Writing a keyword library is very simple.Create a new class library project in C#/Vb.net and add a _public_ class to the project. All public _instance_ or _static_ methods of the class with:
 
   * Return type = void, String, Boolean, Int32, Int64, Double, String[[.md](.md)]
@@ -29,14 +27,13 @@ Writing a keyword library is very simple.Create a new class library project in C
 
 Will be considered as keywords.
 
-The return type of String[[.md](.md)] corresponds to robot framework list variables, the other return types are robot framework scalar variables.
+The return type of String[] corresponds to robot framework list variables, the other return types are robot framework scalar variables.
 
 ## Example ##
 
 The following class exposes three keyword methods
 
-```c#
-
+```
 public class MyKeywordClass
 {
 
@@ -57,7 +54,6 @@ public void Do_Task(string arg1)
 
 }
 ```
-
 The following keywords can be used by robot framework
 
   * DOACTION
@@ -82,17 +78,16 @@ It is also possible to use the _libdoc_ tool from Robot Framework to document al
 
 A keyword method can be marked as Deprecated or Obsolete by using the Obsolete attribute on the keyword method, as shown below:
 
-```c#
+```
 
 public class MyKeywordClass
 {
 
-[Obsolete]
-
-public void DoAction()
-{
-...
-}
+	[Obsolete]
+	public void DoAction()
+	{
+		...
+	}
 }
 ```
 
@@ -111,21 +106,21 @@ If a keyword throws any other type of exception it is treated as a normal error.
 
 An example of a continuable keyword is shown below:
 
-```c#
+```
 
 public class MyKeywordClass
 {
-public void DoAction()
-{
-try
-{
-...
-}
-catch (Exception e)
-{
-throw new ContinuableKeywordException(e)
-}
-}
+	public void DoAction()
+	{
+		try
+		{
+			...
+		}
+		catch (Exception e)
+		{
+			throw new ContinuableKeywordException(e)
+		}
+	}
 }
 ```
 
@@ -151,27 +146,28 @@ Trace.WriteLine(String.Format("{0} was deleted",arg1));
 
 ```
 
-**How is a keyword considered as a FAIL**?<br />
+**How is a keyword considered as a FAIL**?
 A keyword method is considered as FAIL (and will be shown in the robot framework report as FAIL), if the method raises an _exception_. Otherwise the keyword will be considered as PASS.
 
-**Can a keyword method return null?**<br />
+**Can a keyword method return null?**
 Yes, if a methods return parameter type is _string_ the method can return null. Nullable int, bool, double arent supported
 
-**Should I compile as x86, x64, or AnyCPU?**<br />
+**Should I compile as x86, x64, or AnyCPU?**
 Compile to the same as the instance of NRobotRemote that will be used. If your keyword library is x64, you will need x64 NRobotRemote
 
-**Is it possible to load keyword assemblies with conflicting dependencies?**<br />
+**Is it possible to load keyword assemblies with conflicting dependencies?**
 Yes, each keyword assembly and its dependencies are loaded into a separate application domain.
 
-**What constructor do I need in my keyword class?**<br />
+**What constructor do I need in my keyword class?**
 For _instance_ and _static_ methods to be considered as keywords, the keyword class needs a default parameter-less constructor. A constructor is not needed for _static_ methods to be considered as keywords.
 
-**Can I install my keyword library into the GAC?**<br />
+**Can I install my keyword library into the GAC?**
 Yes, NRobotRemote can load keyword assemblies from the GAC by specifying the full assembly details (Name, Culture, Version, PublicKey). For example using NRobotRemoteConsole to load System.IO.File class as a keyword library:
-```
 
+```
 NRobotRemoteConsole.exe -k mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089:System.IO.File -p 8271
 ```
+
 # NRobotRemote Console #
 
 ## Configuration ##
@@ -202,7 +198,6 @@ Where _fulltypename_ is the full type name of the keyword class (including names
 The following command line loads two keyword types from two different libraries:
 
 ```
-
 NRobotRemoteConsole.exe -p 8271 -k UILibrary.dll:UILibrary.UIKeywords OracleLibrary.dll:OracleLibrary.OracleKeywords
 ```
 
@@ -277,7 +272,7 @@ RIDE (Robot IDE) is a GUI for creating robot framework test cases. One of its ma
 
 This page details how .Net keyword libraries can be used with RIDE.
 
-# Details #
+## Details ##
 
 RIDE cannot directly interrogate a .Net keyword library to find what keywords are available in it. However a "Library Spec" file can be given to RIDE.
 
@@ -291,7 +286,6 @@ A library spec file is created using the robot framework libdoc tool. To use thi
 Example:
 
 ```
-
 java -jar robotframework-2.8.1.jar libdoc --name TestLib Remote::localhost:8271/full/type/name TestLib.xml
 ```
 
@@ -305,14 +299,11 @@ NRobotRemote is designed as an asynchronous component that can be hosted in any 
 
 The following example shows how to start the NRobotRemote service.
 
-```c#
-
-
+```
 RemoteService srv = new RemoteService(options.library,options.type,options.port,options.docfile);
 srv.StartAsync();
 Console.ReadLine();
 srv.Stop();
-
 ```
 
 _RemoteService_ also has a public event called _StopRequested_ this event is raised when keyword STOP REMOTE SERVER is called. The host application can determine if to close or not by handling this event. The event is called in a background thread.
