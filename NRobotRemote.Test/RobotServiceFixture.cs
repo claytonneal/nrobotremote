@@ -4,7 +4,6 @@ using NRobotRemote;
 using System;
 using System.IO;
 using NRobotRemote.Config;
-using System.Configuration;
 
 namespace NRobotRemote.Test
 {

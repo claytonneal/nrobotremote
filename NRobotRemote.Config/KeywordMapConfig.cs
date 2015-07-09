@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
-using System.Configuration;
 
 namespace NRobotRemote.Config
 {
