@@ -1,23 +1,25 @@
+# Introduction
+
 NRobotRemote is a .Net based Robot Framework remote server. It can be used to host and expose .Net keywords to Robot Framework, thus bringing the full capabilities of Robot Framework keyword based automation to .Net.
 
-## NuGet Package ##
+# NuGet Package
 
 [Click Here](https://www.nuget.org/packages/NRobotRemote/)
 
-## Release Notes ##
+# Release Notes
 
 | **Version** | **Date** | **Issues** |
 |:------------|:---------|:-----------|
 | 1.0.0       | 11-Jul-2013 | First Release |
-| 1.1.0       | 16-Jul-2013 | [issue 4](https://code.google.com/p/nrobotremote/issues/detail?id=4) |
-| 1.2.0       | 22-Jul-2013 | [issue 8](https://code.google.com/p/nrobotremote/issues/detail?id=8), [issue 12](https://code.google.com/p/nrobotremote/issues/detail?id=12), [issue 13](https://code.google.com/p/nrobotremote/issues/detail?id=13) |
-| 1.2.1       | 23-Jul-2013 | [issue 14](https://code.google.com/p/nrobotremote/issues/detail?id=14), [issue 16](https://code.google.com/p/nrobotremote/issues/detail?id=16), [issue 17](https://code.google.com/p/nrobotremote/issues/detail?id=17) |
-| 1.2.2       | 24-Jul-2013 | [issue 19](https://code.google.com/p/nrobotremote/issues/detail?id=19), [issue 20](https://code.google.com/p/nrobotremote/issues/detail?id=20), [issue 21](https://code.google.com/p/nrobotremote/issues/detail?id=21) |
-| 1.2.3       | 07-Aug-2013 | [issue 22](https://code.google.com/p/nrobotremote/issues/detail?id=22), [issue 23](https://code.google.com/p/nrobotremote/issues/detail?id=23), [issue 25](https://code.google.com/p/nrobotremote/issues/detail?id=25), [issue 26](https://code.google.com/p/nrobotremote/issues/detail?id=26) |
-| 1.2.4       | 12-Sep-2013 | [issue 28](https://code.google.com/p/nrobotremote/issues/detail?id=28) |
-| 1.2.5       | 16-Feb-2014 | [issue 30](https://code.google.com/p/nrobotremote/issues/detail?id=30) |
+| 1.1.0       | 16-Jul-2013 | issue 4 |
+| 1.2.0       | 22-Jul-2013 | issue 8, issue 12, issue 13 |
+| 1.2.1       | 23-Jul-2013 | issue 14, issue 16, issue 17) |
+| 1.2.2       | 24-Jul-2013 | issue 19, issue 20], issue 21 |
+| 1.2.3       | 07-Aug-2013 | issue 22, issue 23, issue 25, issue 26 |
+| 1.2.4       | 12-Sep-2013 | issue 28 |
+| 1.2.5       | 16-Feb-2014 | issue 30 |
 
-# How To Write a Keyword Library #
+# How To Write a Keyword Library
 
 Writing a keyword library is very simple.Create a new class library project in C#/Vb.net and add a _public_ class to the project. All public _instance_ or _static_ methods of the class with:
 
@@ -29,7 +31,7 @@ Will be considered as keywords.
 
 The return type of String[] corresponds to robot framework list variables, the other return types are robot framework scalar variables.
 
-## Example ##
+## Example
 
 The following class exposes three keyword methods
 
@@ -54,27 +56,28 @@ public void Do_Task(string arg1)
 
 }
 ```
+
 The following keywords can be used by robot framework
 
   * DOACTION
   * DOOPERATION
   * DO TASK
 
-## General Notes ##
+## General Notes
 
   * It is not possible to overload the same keyword method. For a method to be considered a keyword it must have only one implementation.
 
-## Keyword Names ##
+## Keyword Names
 
 When a keyword such as "DO TASK" is used in a robot framework script, NRobotRemote will try to find a corresponding method with name "do\_task". i.e. Spaces are replaced with underscores.
 
-## Documentation ##
+## Documentation
 
 If you compile your keyword class to produce xml documentation, the xml documentation file can be passed to NRobotRemote. When the keyword is executed the _summary_ xml element of the documentation for the executed method is passed back to robot framework and appears in the results file.
 
 It is also possible to use the _libdoc_ tool from Robot Framework to document all the keywords hosted in NRobotRemote. See Robot Framework documentation on libdoc command line parameters.
 
-## Deprecating a Keyword ##
+## Deprecating a Keyword
 
 A keyword method can be marked as Deprecated or Obsolete by using the Obsolete attribute on the keyword method, as shown below:
 
@@ -93,7 +96,7 @@ public class MyKeywordClass
 
 Obsolete methods are not considered as keywords.
 
-## Continuable and Fatal Errors ##
+## Continuable and Fatal Errors
 
 AS of Robot Framework 2.8, a keyword can return continuable and fatal errors. To return one of these error types they keyword must throw one of the following exception types:
 
@@ -107,7 +110,6 @@ If a keyword throws any other type of exception it is treated as a normal error.
 An example of a continuable keyword is shown below:
 
 ```
-
 public class MyKeywordClass
 {
 	public void DoAction()
@@ -124,8 +126,7 @@ public class MyKeywordClass
 }
 ```
 
-
-## FAQ ##
+## FAQ
 
 **Is it possible for the keyword class to maintain state?**<br />
 Yes, only one instance of the keyword class is created for the duration of the service.
@@ -133,17 +134,15 @@ Yes, only one instance of the keyword class is created for the duration of the s
 **How can my keyword give log information back to robot framework to include in the results file?**<br />
 All _Trace_ information is collected by NRobotRemote when the keyword method is executed. This is passed back to robot framework to include in the results report. Example:
 
-```c#
-
+```
 public class MyKeywordClass
 {
-public String delete_file(String arg1)
-{
-File.Delete(arg1);
-Trace.WriteLine(String.Format("{0} was deleted",arg1));
+	public String delete_file(String arg1)
+	{
+		File.Delete(arg1);
+		Trace.WriteLine(String.Format("{0} was deleted",arg1));
+	}
 }
-}
-
 ```
 
 **How is a keyword considered as a FAIL**?
@@ -168,15 +167,15 @@ Yes, NRobotRemote can load keyword assemblies from the GAC by specifying the ful
 NRobotRemoteConsole.exe -k mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089:System.IO.File -p 8271
 ```
 
-# NRobotRemote Console #
+# NRobotRemote Console
 
-## Configuration ##
+## Configuration
 
-### Config File ###
+### Config File
 
 The config file _NRobotRemoteConsole.exe.config_ is used for _log4net_ configuration. By default log information is written to the console and also to a _rolling_ log file called _NRobotRemoteConsole.log_. Additional appenders can be added, see Log4Net documentation.
 
-### Command Line ###
+### Command Line
 
 The following command line arguments are used:
 
@@ -186,7 +185,7 @@ The following command line arguments are used:
 
 **NOTE** The _type_ name should include the namespace.
 
-### Hosting Multiple Keyword Types ###
+### Hosting Multiple Keyword Types
 
 NRobotRemoteConsole can host multiple keyword types. These are exposed to robot framework XmlRpc at url:
 
@@ -206,7 +205,7 @@ The keywords are then exposed to robot framework at url's:
   * http://localhost:8271/UILibrary/UIKeywords
   * http://localhost:8271/OracleLibrary/OracleKeywords
 
-## Starting and Stopping ##
+## Starting and Stopping
 
 To start NRobotRemoteConsole.exe supply the above command line parameters. <br />
 To stop NRobotRemoteConsole.exe:
@@ -216,20 +215,19 @@ To stop NRobotRemoteConsole.exe:
   * Execute keyword "STOP REMOTE SERVER"
   * Call XmlRpc method stop\_remote\_server
 
-## Monitoring ##
+## Monitoring
 
 A remote _NRobotRemoteConsole_ can be checked to see if up and running by pointing a web browser to http://host:port. This will display information on the NRobotRemote instance, and the available keywords. This is also useful for example if NRobotRemote is started via Ant, the http condition can be used to wait for it to start.
 
-# NRobotRemotTray #
+# NRobotRemotTray
 
 NRoboteRemoteTray is a desktop tray application that hosts the NRobotRemote Robot Framework remote server. It can be used as an alternative to NRobotRemoteConsole.
 
-## Configuration ##
+## Configuration
 
 NRobotRemotTray is configured using the .config file _NRobotRemoteTray.exe.config_, in this file the _port_ number of the service, and the keyword assemblies, types and xml documentation files can be defined. An example is shown below:
 
 ```
-
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
 
@@ -244,7 +242,6 @@ NRobotRemotTray is configured using the .config file _NRobotRemoteTray.exe.confi
 </assemblies>
 </NRobotRemoteConfiguration>
 </configuration>
-
 ```
 
 | **Element** | **Description** |
@@ -252,11 +249,11 @@ NRobotRemotTray is configured using the .config file _NRobotRemoteTray.exe.confi
 | port        | Defines the port number the service will listen on |
 | assemblies  | Defines the keyword assembly, keyword type name and optionally the xml documentation file. The assembly name can be a path to the assembly or the full name of the assembly if in the GAC. |
 
-## Starting ##
+## Starting 
 
 To start NRobotRemoteTray double click on _NRobotRemoteTray.exe_, the application will start and the icon will be visible in the application tray (near the system clock on Windows 7).
 
-## Context Menu ##
+## Context Menu
 
 Right clicking on the tray icon gives the following options:
 
@@ -272,11 +269,11 @@ RIDE (Robot IDE) is a GUI for creating robot framework test cases. One of its ma
 
 This page details how .Net keyword libraries can be used with RIDE.
 
-## Details ##
+## Details
 
 RIDE cannot directly interrogate a .Net keyword library to find what keywords are available in it. However a "Library Spec" file can be given to RIDE.
 
-## Generating a Library Spec File ##
+## Generating a Library Spec File
 
 A library spec file is created using the robot framework libdoc tool. To use this tool with NRobotRemote:
 
@@ -289,7 +286,7 @@ Example:
 java -jar robotframework-2.8.1.jar libdoc --name TestLib Remote::localhost:8271/full/type/name TestLib.xml
 ```
 
-## Giving RIDE the Library Spec File ##
+## Giving RIDE the Library Spec File
 
 Once the library spec xml file is created by _libdoc_ it has to be passed to RIDE. Details of this can be found [here](https://github.com/robotframework/RIDE/wiki/Keyword-Completion#wiki-using-library-specs)
 
