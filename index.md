@@ -18,6 +18,7 @@ NRobotRemote is a .Net based Robot Framework remote server. It can be used to ho
 | 1.2.3       | 07-Aug-2013 | issue 22, issue 23, issue 25, issue 26 |
 | 1.2.4       | 12-Sep-2013 | issue 28 |
 | 1.2.5       | 16-Feb-2014 | issue 30 |
+| 1.2.6       | 18-Aug-2015 | upgrade to .net 4.5 |
 
 # How To Write a Keyword Library
 
