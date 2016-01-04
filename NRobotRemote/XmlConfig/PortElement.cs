@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace NRobotRemote.Config
+namespace NRobotRemote.XmlConfig
 {
 	/// <summary>
 	/// Port number configuration element

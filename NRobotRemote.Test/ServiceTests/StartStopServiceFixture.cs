@@ -1,4 +1,5 @@
-﻿using NRobotRemote.Domain;
+﻿using NRobotRemote.Config;
+using NRobotRemote.Domain;
 using NUnit.Framework;
 
 namespace NRobotRemote.Test.ServiceTests

@@ -1,6 +1,7 @@
 ﻿using System;
 using log4net;
 using System.Security.Principal;
+using NRobotRemote.Config;
 using NRobotRemote.Domain;
 using NRobotRemote.Services;
 

@@ -81,13 +81,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\AssemblyElement.cs" />
-    <Compile Include="Config\AssemblyElementCollection.cs" />
-    <Compile Include="Config\NRobotRemoteConfiguration.cs" />
-    <Compile Include="Config\PortElement.cs" />
+    <Compile Include="XmlConfig\AssemblyElement.cs" />
+    <Compile Include="XmlConfig\AssemblyElementCollection.cs" />
+    <Compile Include="XmlConfig\NRobotRemoteConfiguration.cs" />
+    <Compile Include="XmlConfig\PortElement.cs" />
     <Compile Include="Domain\KeywordLoadingException.cs" />
-    <Compile Include="LibraryConfig.cs" />
-    <Compile Include="NRobotRemoteServiceConfig.cs" />
+    <Compile Include="Config\LibraryConfig.cs" />
+    <Compile Include="Config\NRobotRemoteServiceConfig.cs" />
     <Compile Include="Domain\RunKeywordResult.cs" />
     <Compile Include="Domain\Keyword.cs" />
     <Compile Include="Domain\KeywordManager.cs" />

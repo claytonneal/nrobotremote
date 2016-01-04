@@ -1,5 +1,6 @@
 ﻿using System;
 using CookComputing.XmlRpc;
+using NRobotRemote.Config;
 using NRobotRemote.Services;
 using NUnit.Framework;
 

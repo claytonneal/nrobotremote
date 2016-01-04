@@ -1,4 +1,5 @@
 ﻿using System;
+using NRobotRemote.Config;
 using NRobotRemote.Domain;
 using NUnit.Framework;
 

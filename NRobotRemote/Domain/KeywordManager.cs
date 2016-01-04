@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Xml.Linq;
 using System.IO;
 using log4net;
+using NRobotRemote.Config;
 
 namespace NRobotRemote.Domain
 {

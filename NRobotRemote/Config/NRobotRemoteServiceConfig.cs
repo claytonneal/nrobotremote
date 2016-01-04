@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using NRobotRemote.Config;
+using NRobotRemote.XmlConfig;
 
-namespace NRobotRemote
+namespace NRobotRemote.Config
 {
 	/// <summary>
 	/// Main configuration for NRobotRemote service

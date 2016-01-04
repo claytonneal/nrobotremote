@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using NRobotRemote;
 using log4net;
+using NRobotRemote.Config;
 
 namespace NRobotRemoteTray
 {

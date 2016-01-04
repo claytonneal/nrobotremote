@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using CookComputing.XmlRpc;
+using NRobotRemote.Config;
 using NRobotRemote.Services;
 using NUnit.Framework;
 

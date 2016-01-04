@@ -41,7 +41,7 @@ namespace NRobotRemote.Services
         }
 
 
-#region XxmlRpcMethods
+#region XmlRpcMethods
 
         /// <summary>
 	﻿  ﻿  /// Get a list of keywords available for use
@@ -50,7 +50,7 @@ namespace NRobotRemote.Services
 	  ﻿  ﻿{
 	﻿  ﻿  ﻿	try 
 			{
-				Log.Debug("XmlRpc Method call - get_keyword_names");
+                Log.Debug("XmlRpc Method call - get_keyword_names");
 			    return _keywordManager.GetAllKeywordNames();
 			}
 			catch (Exception e)
