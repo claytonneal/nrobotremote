@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
     <ProjectGuid>{F814D1B0-3EA8-4AF7-B488-B09FFAB41215}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>NRobotRemote.Domain</RootNamespace>
     <AssemblyName>NRobotRemote.Domain</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <NoWin32Manifest>False</NoWin32Manifest>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
@@ -56,22 +56,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InvalidKeywordArgumentsException.cs" />
+    <Compile Include="ExecutionManager.cs" />
     <Compile Include="Keyword.cs" />
-    <Compile Include="KeywordExecutor.cs" />
-    <Compile Include="KeywordFactory.cs" />
-    <Compile Include="KeywordMap.cs" />
-    <Compile Include="KeywordMapBuilder.cs" />
+    <Compile Include="KeywordManager.cs" />
+    <Compile Include="DomainController.cs" />
     <Compile Include="KeywordNameParser.cs" />
-    <Compile Include="KeywordResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnknownKeywordException.cs" />
+    <Compile Include="QueueManager.cs" />
     <Compile Include="XmlDocumentationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NRobotRemote.Config\NRobotRemote.Config.csproj">
-      <Project>{424523F2-7B26-48C2-AA5C-4804B234A489}</Project>
-      <Name>NRobotRemote.Config</Name>
+    <ProjectReference Include="..\NRobotRemote.Command\NRobotRemote.Bridge.csproj">
+      <Project>{9fa0aa56-f2f2-4fa2-9517-8743d2292caf}</Project>
+      <Name>NRobotRemote.Bridge</Name>
     </ProjectReference>
     <ProjectReference Include="..\NRobotRemote.Exceptions\NRobotRemote.Exceptions.csproj">
       <Project>{9E46A153-4C5E-4F4F-9083-5E4569A21130}</Project>

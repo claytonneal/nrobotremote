@@ -44,7 +44,8 @@ namespace NRobotRemoteTray
 		private ToolStripMenuItem _exitoption;
 		private ToolStripMenuItem _aboutoption;
 		private ToolStripMenuItem _keywordsoption;
-		private RemoteServiceConfig _config;
+        private NRobotRemoteService _service;
+	    private NRobotRemoteServiceConfig _serviceConfig;
 		public bool IsRunning;
 		
 		//constructor
@@ -77,13 +78,10 @@ namespace NRobotRemoteTray
             //setup nrobotremote
             try
 			{
-				//get config
-				_config = ConfigurationLoader.GetConfiguration();
-	        	
 	        	//start service
-				RemoteService srv = new RemoteService(_config);
-				srv.StopRequested += OnStopHandler;
-				srv.StartAsync();
+			    _serviceConfig = NRobotRemoteServiceConfig.LoadXMLConfiguration();
+				_service = new NRobotRemoteService(_serviceConfig);
+				_service.StartAsync();
 				IsRunning = true;
 				
 			}
@@ -117,17 +115,8 @@ namespace NRobotRemoteTray
 		/// </summary>
 		public void KeywordsOptionClick(object sender, EventArgs e)
 		{
-			Process.Start(String.Format("http://localhost:{0}",_config.port));
+			Process.Start(String.Format("http://localhost:{0}",_serviceConfig.Port));
 		}
-		
-		/// <summary>
-		/// Event handler for stop_remote_server
-		/// </summary>
-		public static void OnStopHandler(object sender, EventArgs e)
-		{
-			Application.Exit();
-		}
-		
 		
 	}
 }
