@@ -12,8 +12,8 @@ namespace NRobotRemote.Domain
 	{
 		
 		//fields
-		private MethodInfo _method;
-		public String _doc;
+		internal MethodInfo KeywordMethod;
+		internal String KeywordDocumentation;
 		
 		/// <summary>
 		/// Get the keyword name
@@ -22,7 +22,7 @@ namespace NRobotRemote.Domain
 		{
 			get
 			{
-				return KeywordNameParser.ToFriendlyName(_method.Name);
+				return KeywordNameParser.ToFriendlyName(KeywordMethod.Name);
 			}
 		}
 		
@@ -34,7 +34,7 @@ namespace NRobotRemote.Domain
 			get
 			{
 				//get method parameters
-	﻿  ﻿  ﻿  		ParameterInfo[] pis = _method.GetParameters();
+	﻿  ﻿  ﻿  		ParameterInfo[] pis = KeywordMethod.GetParameters();
 	﻿  ﻿  ﻿  		string[] args = new String[pis.Length];
 	﻿  ﻿  ﻿   		int i = 0;
 	﻿  ﻿  ﻿  		foreach(ParameterInfo pi in pis)
@@ -52,7 +52,7 @@ namespace NRobotRemote.Domain
 		{
 			get
 			{
-				return _method;
+				return KeywordMethod;
 			}
 		}
 		
@@ -63,7 +63,7 @@ namespace NRobotRemote.Domain
 		{
 			get
 			{
-				return _method.GetParameters().Length;
+				return KeywordMethod.GetParameters().Length;
 			}
 		}
 		
@@ -72,10 +72,9 @@ namespace NRobotRemote.Domain
 		/// </summary>
 		public Keyword(MethodInfo method)
 		{
-			//check
 			if (method==null) throw new ArgumentNullException("Cannot instanciate keyword from null method");
-			_method = method;
-			_doc = String.Empty;
+			KeywordMethod = method;
+			KeywordDocumentation = String.Empty;
 		}
 		
 	}
