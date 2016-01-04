@@ -1,33 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
-    <ProjectGuid>{1BD61A13-DA09-477A-8A42-4072681DF950}</ProjectGuid>
+    <ProjectGuid>{5CF5BEF7-8628-4BD5-A85C-5BB440D5F368}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>Library</OutputType>
-    <RootNamespace>NRobotRemote</RootNamespace>
-    <AssemblyName>NRobotRemote</AssemblyName>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>NRobotRemoteConsole</RootNamespace>
+    <AssemblyName>NRobotRemoteConsole</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <NoWin32Manifest>False</NoWin32Manifest>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <NoStdLib>False</NoStdLib>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <WarningLevel>4</WarningLevel>
-    <SignAssembly>False</SignAssembly>
-    <DelaySign>False</DelaySign>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
     <BaseAddress>4194304</BaseAddress>
     <RegisterForComInterop>False</RegisterForComInterop>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <FileAlignment>4096</FileAlignment>
-    <Prefer32Bit>False</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -36,8 +35,8 @@
     <Optimize>False</Optimize>
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <StartAction>Project</StartAction>
+    <StartArguments>-p 8271 -k NRobotRemote.Test.Keywords.dll:NRobotRemote.Test.Keywords.PublicClass:NRobotRemote.Test.Keywords.xml</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>..\build\</OutputPath>
@@ -47,14 +46,15 @@
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <OutputPath>..\build\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CookComputing.XmlRpcV2">
-      <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
@@ -62,30 +62,14 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HTTPService.cs" />
-    <Compile Include="IRemoteService.cs" />
-    <Compile Include="IRemoteClient.cs" />
-    <Compile Include="KeywordDomainBuilder.cs" />
-    <Compile Include="KeywordDomainException.cs" />
-    <Compile Include="KeywordMapCollection.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemoteService.cs" />
-    <Compile Include="XmlRpcResultBuilder.cs" />
-    <Compile Include="XmlRpcService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="app.manifest" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -93,12 +77,12 @@
       <Project>{424523F2-7B26-48C2-AA5C-4804B234A489}</Project>
       <Name>NRobotRemote.Config</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NRobotRemote.Domain\NRobotRemote.Domain.csproj">
-      <Project>{F814D1B0-3EA8-4AF7-B488-B09FFAB41215}</Project>
-      <Name>NRobotRemote.Domain</Name>
+    <ProjectReference Include="..\NRobotRemote\NRobotRemote.csproj">
+      <Project>{1BD61A13-DA09-477A-8A42-4072681DF950}</Project>
+      <Name>NRobotRemote</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>nuget.exe install $(ProjectDir)packages.config -o $(SolutionDir)Packages</PreBuildEvent>
   </PropertyGroup>
