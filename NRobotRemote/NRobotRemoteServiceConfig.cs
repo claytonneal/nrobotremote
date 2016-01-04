@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using NRobotRemote.Config;
 
 namespace NRobotRemote
@@ -24,7 +23,7 @@ namespace NRobotRemote
             AssemblyConfigs.Add(config.TypeName, config);
         }
 
-        public static NRobotRemoteServiceConfig LoadXMLConfiguration()
+        public static NRobotRemoteServiceConfig LoadXmlConfiguration()
         {
             var xmlconfig = NRobotRemoteConfiguration.GetConfig();
             var result = new NRobotRemoteServiceConfig();

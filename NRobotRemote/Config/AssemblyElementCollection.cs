@@ -1,5 +1,4 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 
 namespace NRobotRemote.Config
 {
@@ -11,15 +10,15 @@ namespace NRobotRemote.Config
 		{
 			get
 			{
-				return base.BaseGet(index) as AssemblyElement;
+				return BaseGet(index) as AssemblyElement;
 			}
 			set
 			{
-				if (base.BaseGet(index) != null)
+				if (BaseGet(index) != null)
 				{
-					base.BaseRemoveAt(index);
+					BaseRemoveAt(index);
 				}
-				base.BaseAdd(index,value);
+				BaseAdd(index,value);
 			}
 		}
 		

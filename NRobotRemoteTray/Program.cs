@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using System.IO;
 using System.Reflection;
 using NRobotRemote;
-using NRobotRemote.Config;
 using log4net;
 
 namespace NRobotRemoteTray
@@ -16,7 +14,7 @@ namespace NRobotRemoteTray
 	{
 		
 		//log4net
-		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
 		
 		/// <summary>
 		/// Program entry point.
@@ -24,7 +22,7 @@ namespace NRobotRemoteTray
 		[STAThread]
 		private static void Main(string[] args)
 		{
-			log.Debug("Starting NRobotRemoteTray");
+			Log.Debug("Starting NRobotRemoteTray");
 			var trayapp = new TrayApplication();
 			if (trayapp.IsRunning)
 			{
@@ -79,7 +77,7 @@ namespace NRobotRemoteTray
             try
 			{
 	        	//start service
-			    _serviceConfig = NRobotRemoteServiceConfig.LoadXMLConfiguration();
+			    _serviceConfig = NRobotRemoteServiceConfig.LoadXmlConfiguration();
 				_service = new NRobotRemoteService(_serviceConfig);
 				_service.StartAsync();
 				IsRunning = true;

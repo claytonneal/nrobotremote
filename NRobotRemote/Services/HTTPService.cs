@@ -90,7 +90,7 @@ namespace NRobotRemote.Services
             }
             catch (Exception e)
             {
-                Log.Error(String.Format("Error processing HTTP request : {0}", e.ToString()));
+                Log.Error(String.Format("Error processing HTTP request : {0}", e));
                 context.Response.StatusCode = 500;
                 context.Response.Close();
             }
@@ -122,7 +122,7 @@ namespace NRobotRemote.Services
                 Log.Debug("Sending HTTP request to stop");
                 WebRequest stopreq = WebRequest.Create(String.Format("http://127.0.0.1:{0}/", _port));
                 stopreq.Method = "DELETE";
-                WebResponse resp = stopreq.GetResponse();
+                stopreq.GetResponse();
                 _httpthread.Join(Timeout.Infinite);
 			}
             _httpthread = null;
@@ -173,7 +173,7 @@ namespace NRobotRemote.Services
 	        	//finish html
 	        	html.Append("</body></html>");
         		response.StatusCode = 200;
-        		byte[] buffer = System.Text.Encoding.UTF8.GetBytes(html.ToString());
+        		byte[] buffer = Encoding.UTF8.GetBytes(html.ToString());
 				response.OutputStream.Write(buffer,0,buffer.Length);
         	}
         	catch (Exception e)

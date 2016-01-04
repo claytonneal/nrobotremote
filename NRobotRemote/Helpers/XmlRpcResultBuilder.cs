@@ -2,7 +2,7 @@
 using CookComputing.XmlRpc;
 using NRobotRemote.Domain;
 
-namespace NRobotRemote.Services
+namespace NRobotRemote.Helpers
 {
 	/// <summary>
 	/// Builds an XmlRpc Result from a command result

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Diagnostics;
-using System.IO;
 using System.Xml.Linq;
 
 namespace NRobotRemote.Domain
@@ -35,8 +33,8 @@ namespace NRobotRemote.Domain
 		/// </summary>
 		public Keyword(Object classinstance, MethodInfo method, XDocument documentation)
 		{
-            if (classinstance == null) throw new ArgumentNullException("No class instance specified");
-            if (method==null) throw new ArgumentNullException("No keyword method specified");
+            if (classinstance == null) throw new Exception("No class instance specified");
+            if (method==null) throw new Exception("No keyword method specified");
 			//record properties
             KeywordMethod = method;
 			KeywordDocumentation = String.Empty;

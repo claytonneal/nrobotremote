@@ -3,6 +3,7 @@ using System.Net;﻿  ﻿
 using CookComputing.XmlRpc;
 using log4net;
 using NRobotRemote.Domain;
+using NRobotRemote.Helpers;
 
 namespace NRobotRemote.Services
 {
@@ -18,7 +19,6 @@ namespace NRobotRemote.Services
 		private static readonly ILog Log = LogManager.GetLogger(typeof(XmlRpcService));
 		
 		//constants
-		private const String CStopRemoteServer = "STOP REMOTE SERVER";
 		private const String CIntro = "__INTRO__";
 		private const String CInit = "__INIT__";
 
@@ -97,16 +97,15 @@ namespace NRobotRemote.Services
 				Log.Error(String.Format("Exception in method - get_keyword_arguments : {0}",e.Message));
 				throw new XmlRpcFaultException(1,e.Message);
 			}
-	﻿  ﻿  }﻿  ﻿  
-			
-	﻿  ﻿  /// <summary>
-	﻿  ﻿  /// Get documentation for specified Robot Framework keyword.
-	﻿  ﻿  /// Done by reading the .NET compiler generated XML documentation
-	﻿  ﻿  /// for the loaded class library.
-	﻿  ﻿  /// </summary>
-	﻿  ﻿  /// <param name="keyword">The keyword to get documentation for.</param>
-	﻿  ﻿  /// <returns>A documentation string for the given keyword.</returns>
-	﻿  ﻿  public string get_keyword_documentation(string friendlyname)
+	﻿  ﻿  }
+
+	    /// <summary>
+	    /// Get documentation for specified Robot Framework keyword.
+	    /// Done by reading the .NET compiler generated XML documentation
+	    /// for the loaded class library.
+	    /// </summary>
+	    /// <returns>A documentation string for the given keyword.</returns>
+	    public string get_keyword_documentation(string friendlyname)
 	﻿  ﻿  {
 		﻿  ﻿ 	Log.Debug(String.Format("XmlRpc Method call - get_keyword_documentation {0}", friendlyname));
 			try

@@ -242,7 +242,7 @@ namespace NRobotRemote.Domain
 
                 //call method
                 timer.Start();
-                if (method.ReturnParameter.ParameterType == typeof (void))
+                if (method.ReturnParameter != null && method.ReturnParameter.ParameterType == typeof (void))
                 {
                     method.Invoke(keyword.ClassInstance, arguments);
                     result.KeywordReturn = null;
