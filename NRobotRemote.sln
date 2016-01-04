@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRobotRemoteTray", "NRobotR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRobotRemote.Exceptions", "NRobotRemote.Exceptions\NRobotRemote.Exceptions.csproj", "{9E46A153-4C5E-4F4F-9083-5E4569A21130}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRobotRemote.Test", "NRobotRemote.Domain.Test\NRobotRemote.Test.csproj", "{8F4323F8-D61C-48BF-92B5-5F300D22539C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NRobotRemote.Test", "NRobotRemote.Test\NRobotRemote.Test.csproj", "{8F4323F8-D61C-48BF-92B5-5F300D22539C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
