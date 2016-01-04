@@ -19,7 +19,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\build\NRobotRemote.Test.xml</DocumentationFile>
+    <DocumentationFile>..\build\AnyCpu\NRobotRemote.Test.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
