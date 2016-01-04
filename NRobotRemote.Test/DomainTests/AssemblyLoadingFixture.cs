@@ -3,6 +3,9 @@ using NUnit.Framework;
 
 namespace NRobotRemote.Test.DomainTests
 {
+
+#pragma warning disable 1591
+
     /// <summary>
     /// Tests that check loading of keyword assembly
     /// </summary>
@@ -113,4 +116,8 @@ namespace NRobotRemote.Test.DomainTests
         }
 
     }
+
+
+#pragma warning restore 1591
+
 }

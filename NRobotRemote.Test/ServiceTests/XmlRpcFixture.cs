@@ -6,6 +6,8 @@ using NUnit.Framework;
 namespace NRobotRemote.Test.ServiceTests
 {
 
+#pragma warning disable 1591
+
     /// <summary>
     /// Tests to call the individual xml-rpc methods and assert the returned values
     /// </summary>
@@ -231,5 +233,6 @@ namespace NRobotRemote.Test.ServiceTests
 
     }
 
+#pragma warning restore 1591
 
 }

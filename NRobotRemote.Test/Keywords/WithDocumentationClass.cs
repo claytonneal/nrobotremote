@@ -1,5 +1,8 @@
 ﻿namespace NRobotRemote.Test.Keywords
 {
+
+#pragma warning disable 1591
+
     public class WithDocumentationClass
     {
 
@@ -11,4 +14,7 @@
         public void MethodWithNoComment() { }
 
     }
+
+#pragma warning restore 1591
+
 }

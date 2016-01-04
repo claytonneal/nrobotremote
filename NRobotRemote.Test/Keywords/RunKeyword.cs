@@ -5,6 +5,9 @@ using NRobotRemote.Exceptions;
 
 namespace NRobotRemote.Test.Keywords
 {
+
+#pragma warning disable 1591
+
     /// <summary>
     /// Keywords used by the RunKeywordFixture
     /// </summary>
@@ -38,4 +41,8 @@ namespace NRobotRemote.Test.Keywords
         }
 
     }
+
+
+#pragma warning restore 1591
+
 }

@@ -2,7 +2,10 @@
 
 namespace NRobotRemote.Test.Keywords
 {
-    
+
+#pragma warning disable 1591
+
+
     /// <summary>
     /// Class containing different keyword method signatures
     /// </summary>
@@ -172,4 +175,7 @@ namespace NRobotRemote.Test.Keywords
 
 
     }
+
+#pragma warning restore 1591
+
 }

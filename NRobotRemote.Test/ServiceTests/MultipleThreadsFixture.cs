@@ -8,7 +8,9 @@ using NUnit.Framework;
 
 namespace NRobotRemote.Test.ServiceTests
 {
-    
+
+#pragma warning disable 1591
+
     /// <summary>
     /// Tests to call the service xml-rpc methods with multiple threads
     /// </summary>
@@ -269,4 +271,7 @@ namespace NRobotRemote.Test.ServiceTests
 #endregion
 
     }
+
+#pragma warning restore 1591
+
 }

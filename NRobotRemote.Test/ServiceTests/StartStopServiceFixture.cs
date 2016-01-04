@@ -3,7 +3,9 @@ using NUnit.Framework;
 
 namespace NRobotRemote.Test.ServiceTests
 {
-    
+
+#pragma warning disable 1591
+
     /// <summary>
     /// Tests to start and stop the service with different configurations
     /// </summary>
@@ -128,4 +130,7 @@ namespace NRobotRemote.Test.ServiceTests
 
 
     }
+
+#pragma warning restore 1591
+
 }
