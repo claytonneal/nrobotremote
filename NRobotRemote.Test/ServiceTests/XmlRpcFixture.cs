@@ -16,7 +16,6 @@ namespace NRobotRemote.Test.ServiceTests
     public class XmlRpcFixture
     {
 
-        private static IRemoteClient _client;
         private NRobotRemoteService _service;
 
         [SetUp]
@@ -48,9 +47,6 @@ namespace NRobotRemote.Test.ServiceTests
                 });
             _service = new NRobotRemoteService(config);
             _service.StartAsync();
-            //setup client
-            _client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
-            _client.Url = "http://127.0.0.1:8270";
         }
 
         [TearDown]
@@ -68,9 +64,22 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void get_keyword_names()
         {
-            string[] result = _client.get_keyword_names();
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/TestKeywords";
+            string[] result = client.get_keyword_names();
             Assert.IsTrue(result.Length > 0);
             Assert.Contains("INT RETURNTYPE",result);
+        }
+
+        [ExpectedException(typeof(XmlRpcFaultException))]
+        [Test]
+        public void get_keyword_names_invalid_url()
+        {
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/UnknownType";
+            string[] result = client.get_keyword_names();
+            Assert.IsTrue(result.Length > 0);
+            Assert.Contains("INT RETURNTYPE", result);
         }
 
 #endregion
@@ -80,7 +89,9 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void get_keyword_arguments()
         {
-            string[] result = _client.get_keyword_arguments("STRING PARAMETERTYPE");
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/TestKeywords";
+            string[] result = client.get_keyword_arguments("STRING PARAMETERTYPE");
             Assert.IsTrue(result.Length > 0);
             Assert.Contains("arg1", result);
             Assert.Contains("arg2", result);
@@ -93,7 +104,9 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void get_keyword_documentation()
         {
-            string result = _client.get_keyword_documentation("MethodWithComments");
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/WithDocumentationClass";
+            string result = client.get_keyword_documentation("MethodWithComments");
             Assert.IsFalse(String.IsNullOrEmpty(result));
             Assert.IsTrue(result == "This is a method with a comment");
         }
@@ -109,7 +122,9 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void RunKeyword_NoArgs_VoidReturn_EmptyArgs()
         {
-            var result = _client.run_keyword("NoInputNoOutput", new object[0]);
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/RunKeyword";
+            var result = client.run_keyword("NoInputNoOutput", new object[0]);
             Assert.IsTrue(result["status"].ToString() == "PASS");
             Assert.IsTrue(String.IsNullOrEmpty(result["error"].ToString()));
             Assert.IsTrue(String.IsNullOrEmpty(result["return"].ToString()));
@@ -118,7 +133,9 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void RunKeyword_ThrowsException()
         {
-            var result = _client.run_keyword("ThrowsException", new object[0]);
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/RunKeyword";
+            var result = client.run_keyword("ThrowsException", new object[0]);
             Assert.IsTrue(result["status"].ToString() == "FAIL");
             Assert.IsTrue(String.IsNullOrEmpty(result["return"].ToString()));
             Assert.IsFalse(result.ContainsKey("fatal"));
@@ -130,7 +147,9 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void RunKeyword_ThrowsFatalException()
         {
-            var result = _client.run_keyword("ThrowsFatalException", new object[0]);
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/RunKeyword";
+            var result = client.run_keyword("ThrowsFatalException", new object[0]);
             Assert.IsTrue(result["status"].ToString() == "FAIL");
             Assert.IsTrue(String.IsNullOrEmpty(result["return"].ToString()));
             Assert.IsTrue(result.ContainsKey("fatal"));
@@ -141,7 +160,9 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void RunKeyword_ThrowsContinuableException()
         {
-            var result = _client.run_keyword("ThrowsContinuableException", new object[0]);
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/RunKeyword";
+            var result = client.run_keyword("ThrowsContinuableException", new object[0]);
             Assert.IsTrue(result["status"].ToString() == "FAIL");
             Assert.IsTrue(String.IsNullOrEmpty(result["return"].ToString()));
             Assert.IsTrue(result.ContainsKey("continuable"));
@@ -152,7 +173,9 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void RunKeyword_TraceOutput()
         {
-            var result = _client.run_keyword("WritesTraceOutput", new object[0]);
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/RunKeyword";
+            var result = client.run_keyword("WritesTraceOutput", new object[0]);
             Assert.IsTrue(result["status"].ToString() == "PASS");
             Assert.IsTrue(String.IsNullOrEmpty(result["return"].ToString()));
             Assert.IsTrue(result["output"].ToString().Contains("First line"));
@@ -162,7 +185,9 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void RunKeyword_IntReturnType()
         {
-            var result = _client.run_keyword("Int ReturnType", new object[0]);
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/TestKeywords";
+            var result = client.run_keyword("Int ReturnType", new object[0]);
             Assert.IsTrue(result["status"].ToString() == "PASS");
             Assert.IsTrue(Convert.ToInt32(result["return"]) == 1);
         }
@@ -170,7 +195,9 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void RunKeyword_Int64ReturnType()
         {
-            var result = _client.run_keyword("Int64 ReturnType", new object[0]);
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/TestKeywords";
+            var result = client.run_keyword("Int64 ReturnType", new object[0]);
             Assert.IsTrue(result["status"].ToString() == "PASS");
             Assert.IsTrue(Convert.ToInt32(result["return"]) == 1);
         }
@@ -178,7 +205,9 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void RunKeyword_StringReturnType()
         {
-            var result = _client.run_keyword("String ReturnType", new object[0]);
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/TestKeywords";
+            var result = client.run_keyword("String ReturnType", new object[0]);
             Assert.IsTrue(result["status"].ToString() == "PASS");
             Assert.IsTrue(Convert.ToString(result["return"]) == "1");
         }
@@ -186,7 +215,9 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void RunKeyword_DoubleReturnType()
         {
-            var result = _client.run_keyword("Double ReturnType", new object[0]);
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/TestKeywords";
+            var result = client.run_keyword("Double ReturnType", new object[0]);
             Assert.IsTrue(result["status"].ToString() == "PASS");
             Assert.IsTrue(Convert.ToDouble(result["return"]).Equals(1));
         }
@@ -194,15 +225,19 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void RunKeyword_BooleanReturnType()
         {
-            var result = _client.run_keyword("Boolean ReturnType", new object[0]);
-            Assert.IsTrue(result["status"].ToString() == "PASS");
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/TestKeywords";
+            var result = client.run_keyword("Boolean ReturnType", new object[0]);
+            Assert.IsTrue(result["status"].ToString() == "PASS", result["error"].ToString());
             Assert.IsTrue(Convert.ToBoolean(result["return"]));
         }
 
         [Test]
         public void RunKeyword_StringArrayReturnType()
         {
-            var result = _client.run_keyword("StringArray ReturnType", new object[0]);
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/TestKeywords";
+            var result = client.run_keyword("StringArray ReturnType", new object[0]);
             var returnval = (string[]) result["return"];
             Assert.IsTrue(result["status"].ToString() == "PASS");
             Assert.IsTrue(returnval.Length == 3);
@@ -211,21 +246,27 @@ namespace NRobotRemote.Test.ServiceTests
         [Test]
         public void RunKeyword_LessThanRequiredArgs()
         {
-            var result = _client.run_keyword("String ParameterType", new object[] {"1"});
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/TestKeywords";
+            var result = client.run_keyword("String ParameterType", new object[] {"1"});
             Assert.IsTrue(result["status"].ToString() == "FAIL");
         }
 
         [Test]
         public void RunKeyword_MoreThanRequiredArgs()
         {
-            var result = _client.run_keyword("String ParameterType", new object[] {"1", "2", "3"});
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/TestKeywords";
+            var result = client.run_keyword("String ParameterType", new object[] {"1", "2", "3"});
             Assert.IsTrue(result["status"].ToString() == "FAIL");
         }
 
         [Test]
         public void RunKeyword_StaticMethod()
         {
-            var result = _client.run_keyword("PublicStatic Method", new object[0]);
+            var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/TestKeywords";
+            var result = client.run_keyword("PublicStatic Method", new object[0]);
             Assert.IsTrue(result["status"].ToString() == "PASS");
         }
 

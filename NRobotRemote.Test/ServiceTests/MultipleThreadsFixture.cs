@@ -96,7 +96,7 @@ namespace NRobotRemote.Test.ServiceTests
         {
             //setup client
             var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
-            client.Url = "http://127.0.0.1:8270";
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/RunKeyword";
             var output = new List<string[]>();
             //loop calling method
             for (int counter = 0; counter < numloops; counter++)
@@ -148,7 +148,7 @@ namespace NRobotRemote.Test.ServiceTests
         {
             //setup client
             var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
-            client.Url = "http://127.0.0.1:8270";
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/TestKeywords";
             var output = new List<string[]>();
             //loop calling method
             for (int counter = 0; counter < numloops; counter++)
@@ -199,7 +199,7 @@ namespace NRobotRemote.Test.ServiceTests
         {
             //setup client
             var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
-            client.Url = "http://127.0.0.1:8270";
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/WithDocumentationClass";
             var output = new List<string>();
             //loop calling method
             for (int counter = 0; counter < numloops; counter++)
@@ -250,7 +250,7 @@ namespace NRobotRemote.Test.ServiceTests
         {
             //setup client
             var client = (IRemoteClient)XmlRpcProxyGen.Create(typeof(IRemoteClient));
-            client.Url = "http://127.0.0.1:8270";
+            client.Url = "http://127.0.0.1:8270/NRobotRemote/Test/Keywords/RunKeyword";
             var output = new List<XmlRpcStruct>();
             //loop calling method
             for (int counter = 0; counter < numloops; counter++)

@@ -167,35 +167,18 @@ namespace NRobotRemote.Domain
         /// <summary>
         /// Gets a keyword based on its name, exception if not found in map
         /// </summary>
-        public Keyword GetKeyword(string friendlyname)
+        public Keyword GetKeyword(string typename, string friendlyname)
         {
-            foreach (var type in _loadedKeywords)
+            if (!_loadedKeywords.ContainsKey(typename)) throw new Exception(String.Format("Keyword {0} not found in type {1}", friendlyname,typename));
+            var keywords = _loadedKeywords[typename];
+            foreach (var keyword in keywords)
             {
-                foreach (var keyword in type.Value)
+                if (String.Equals(keyword.FriendlyName,friendlyname,StringComparison.CurrentCultureIgnoreCase))
                 {
-                    if (String.Equals(keyword.FriendlyName,friendlyname,StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        return keyword;
-                    }
+                    return keyword;
                 }
             }
-            throw new Exception(String.Format("Keyword not found {0}", friendlyname));
-        }
-
-        /// <summary>
-        /// Gets all keyword friendly names
-        /// </summary>
-        public string[] GetAllKeywordNames()
-        {
-            var keywordnames = new List<string>();
-            foreach (var type in _loadedKeywords)
-            {
-                foreach (var keyword in type.Value)
-                {
-                    keywordnames.Add(keyword.FriendlyName);
-                }
-            }
-            return keywordnames.ToArray();
+            throw new Exception(String.Format(String.Format("Keyword {0} not found in type {1}", friendlyname,typename)));
         }
 
         /// <summary>
@@ -209,9 +192,18 @@ namespace NRobotRemote.Domain
         }
 
         /// <summary>
+        /// Gets all loaded typenames
+        /// </summary>
+        public string[] GetLoadedTypeNames()
+        {
+            return _loadedKeywords.Keys.ToArray();
+        }
+
+
+        /// <summary>
         /// Executes a keyword
         /// </summary>
-        public RunKeywordResult RunKeyword(string friendlyname, object[] arguments)
+        public RunKeywordResult RunKeyword(string typename, string friendlyname, object[] arguments)
         {
             
             //setup
@@ -224,7 +216,7 @@ namespace NRobotRemote.Domain
             try
             {
                 //setup
-                var keyword = GetKeyword(friendlyname);
+                var keyword = GetKeyword(typename, friendlyname);
                 var method = keyword.KeywordMethod;
                 var numargs = keyword.ArgumentCount;
 

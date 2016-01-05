@@ -20,7 +20,7 @@ namespace NRobotRemote.Test.DomainTests
             config.Assembly = "NRobotRemote.Test";
             config.TypeName = "NRobotRemote.Test.Keywords.TestKeywords";
             kwmanager.AddLibrary(config);
-            Assert.True(kwmanager.GetAllKeywordNames().Length > 0);
+            Assert.True(kwmanager.GetKeywordNamesForType("NRobotRemote.Test.Keywords.TestKeywords").Length > 0);
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace NRobotRemote.Test.DomainTests
             config.Assembly = "NRobotRemote.Test";
             config.TypeName = "NRobotRemote.Test.Keywords.InternalClass";
             kwmanager.AddLibrary(config);
-            Assert.True(kwmanager.GetAllKeywordNames().Length == 0);
+            Assert.True(kwmanager.GetKeywordNamesForType("NRobotRemote.Test.Keywords.InternalClass").Length == 0);
         }
 
         [Test]

@@ -112,7 +112,7 @@ namespace NRobotRemote.Test.DomainTests
             config.TypeName = "NRobotRemote.Test.Keywords.TestKeywords";
             //load second
             kwmanager.AddLibrary(config);
-            var result = kwmanager.GetAllKeywordNames();
+            var result = kwmanager.GetKeywordNamesForType("NRobotRemote.Test.Keywords.TestKeywords");
             Assert.Contains("PUBLIC METHOD", result);
         }
 

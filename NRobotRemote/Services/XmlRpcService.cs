@@ -4,6 +4,8 @@ using CookComputing.XmlRpc;
 using log4net;
 using NRobotRemote.Domain;
 using NRobotRemote.Helpers;
+using System.Collections.Concurrent;
+using System.Threading;
 
 namespace NRobotRemote.Services
 {
@@ -24,11 +26,13 @@ namespace NRobotRemote.Services
 
         //properties
 	    private KeywordManager _keywordManager;
+	    private ConcurrentDictionary<int, string> _threadkeywordtype; 
 
         //constructor
 	    public XmlRpcService(KeywordManager keywordManager)
 	    {
 	        _keywordManager = keywordManager;
+            _threadkeywordtype = new ConcurrentDictionary<int, string>();
 	    }
 
 
@@ -37,7 +41,18 @@ namespace NRobotRemote.Services
         /// </summary>
         public override void ProcessRequest(HttpListenerContext requestContext)
         {
+            //record url of request into property
+            var id = Thread.CurrentThread.ManagedThreadId;
+            var seg = requestContext.Request.Url.Segments;
+            var typeurl = String.Join("", seg, 1, seg.Length - 1).Replace("/", ".");
+            if (!_threadkeywordtype.TryAdd(id, typeurl))
+            {
+                throw new Exception(String.Format("Thread id {0} is already processing a request", id));
+            }
+            //process request
             base.ProcessRequest(requestContext);
+            //remove thread property
+            _threadkeywordtype.TryRemove(id, out typeurl);
         }
 
 
@@ -51,7 +66,8 @@ namespace NRobotRemote.Services
 	﻿  ﻿  ﻿	try 
 			{
                 Log.Debug("XmlRpc Method call - get_keyword_names");
-			    return _keywordManager.GetAllKeywordNames();
+			    var typename = _threadkeywordtype[Thread.CurrentThread.ManagedThreadId];
+			    return _keywordManager.GetKeywordNamesForType(typename);
 			}
 			catch (Exception e)
 			{
@@ -69,7 +85,8 @@ namespace NRobotRemote.Services
 			XmlRpcStruct kr = new XmlRpcStruct();
 			try
 			{
-			    var result = _keywordManager.RunKeyword(keyword, args);
+			    var typename = _threadkeywordtype[Thread.CurrentThread.ManagedThreadId];
+                var result = _keywordManager.RunKeyword(typename, keyword, args);
 				Log.Debug(result.ToString());
 				kr = XmlRpcResultBuilder.ToXmlRpcResult(result);
 			}
@@ -89,7 +106,8 @@ namespace NRobotRemote.Services
             Log.Debug(String.Format("XmlRpc Method call - get_keyword_arguments {0}", friendlyname));
 			try
 			{
-                var keyword = _keywordManager.GetKeyword(friendlyname);
+			    var typename = _threadkeywordtype[Thread.CurrentThread.ManagedThreadId];
+                var keyword = _keywordManager.GetKeyword(typename, friendlyname);
 			    return keyword.ArgumentNames;
 			}
 			catch (Exception e)
@@ -121,7 +139,8 @@ namespace NRobotRemote.Services
 					return String.Empty;    
 				}
 				//get keyword documentation
-                var keyword = _keywordManager.GetKeyword(friendlyname);
+			    var typename = _threadkeywordtype[Thread.CurrentThread.ManagedThreadId];
+                var keyword = _keywordManager.GetKeyword(typename, friendlyname);
 			    var doc = keyword.KeywordDocumentation;
 				Log.Debug(String.Format("Keyword documentation, {0}",doc));
 				return doc;

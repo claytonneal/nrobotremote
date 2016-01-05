@@ -14,13 +14,14 @@ namespace NRobotRemote.Test.DomainTests
     {
 
         private KeywordManager _keywordManager;
+        private const string Typename = "NRobotRemote.Test.Keywords.WithDocumentationClass";
 
         [TestFixtureSetUp]
         public void Setup()
         {
             var config = new LibraryConfig();
             config.Assembly = "NRobotRemote.Test";
-            config.TypeName = "NRobotRemote.Test.Keywords.WithDocumentationClass";
+            config.TypeName = Typename;
             config.Documentation = "NRobotRemote.Test.xml";
             _keywordManager = new KeywordManager();
             _keywordManager.AddLibrary(config);
@@ -29,7 +30,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void GetKeywordDocumentation_HasComments()
         {
-            var keyword = _keywordManager.GetKeyword("MethodWithComments");
+            var keyword = _keywordManager.GetKeyword(Typename, "MethodWithComments");
             Assert.IsFalse(String.IsNullOrEmpty(keyword.KeywordDocumentation));
             Assert.IsTrue(keyword.KeywordDocumentation == "This is a method with a comment");
         }
@@ -37,7 +38,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void GetKeywordDocumentation_NoComments()
         {
-            var keyword = _keywordManager.GetKeyword("MethodWithNoComment");
+            var keyword = _keywordManager.GetKeyword(Typename, "MethodWithNoComment");
             Assert.IsTrue(String.IsNullOrEmpty(keyword.KeywordDocumentation));
         }
 
@@ -49,7 +50,7 @@ namespace NRobotRemote.Test.DomainTests
             config.TypeName = "NRobotRemote.Test.Keywords.WithDocumentationClass";
             var keywordManager = new KeywordManager();
             keywordManager.AddLibrary(config);
-            var keyword = keywordManager.GetKeyword("MethodWithComments");
+            var keyword = keywordManager.GetKeyword(Typename, "MethodWithComments");
             Assert.IsTrue(String.IsNullOrEmpty(keyword.KeywordDocumentation));
         }
 

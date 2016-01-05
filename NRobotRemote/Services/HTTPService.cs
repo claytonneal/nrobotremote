@@ -158,18 +158,26 @@ namespace NRobotRemote.Services
         		StringBuilder html = new StringBuilder();
         		//setup html doc
         		html.Append("<html><body><h1>NRobotRemote</h1><p><h2>Available Keywords</h2>");
-                html.Append("<table style=\"text-align: left; width: 90%;\" border=\"1\" cellpadding=\"1\" cellspacing=\"0\">");
-                html.Append("<thead><tr style=\" background-color: rgb(153, 153, 153)\">");
-                html.Append("<th>Keyword</th><th>Arguments</th><th>Description</th></tr>");
-                html.Append("</thead><tbody>");
-                var names = _keywordManager.GetAllKeywordNames();
-	        	foreach(string name in names)
-	        	{
-                    var keyword =  _keywordManager.GetKeyword(name);
-                    html.Append(String.Format("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>", name,
-                                              String.Join(",", keyword.ArgumentNames),
-                                              keyword.KeywordDocumentation));
-	        	}
+        	    var types = _keywordManager.GetLoadedTypeNames();
+        	    foreach (var typename in types)
+        	    {
+        	        var names = _keywordManager.GetKeywordNamesForType(typename);
+                    //per type table
+        	        html.Append("<h3>Keywords from type: " + typename + "</h3>");
+                    html.Append("<table style=\"text-align: left; width: 90%;\" border=\"1\" cellpadding=\"1\" cellspacing=\"0\">");
+                    html.Append("<thead><tr style=\" background-color: rgb(153, 153, 153)\">");
+                    html.Append("<th>Keyword</th><th>Arguments</th><th>Description</th></tr>");
+                    html.Append("</thead><tbody>");
+                    //add keywords
+                    foreach (string name in names)
+                    {
+                        var keyword = _keywordManager.GetKeyword(typename, name);
+                        html.Append(String.Format("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>", name,
+                                                  String.Join(",", keyword.ArgumentNames),
+                                                  keyword.KeywordDocumentation));
+                    }
+        	    }
+                
 	        	//finish html
 	        	html.Append("</body></html>");
         		response.StatusCode = 200;

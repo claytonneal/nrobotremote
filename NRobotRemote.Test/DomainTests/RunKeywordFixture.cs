@@ -14,23 +14,25 @@ namespace NRobotRemote.Test.DomainTests
     {
 
         private KeywordManager _keywordManager;
+        private const string RunKeywordType = "NRobotRemote.Test.Keywords.RunKeyword";
+        private const string TestKeywordType = "NRobotRemote.Test.Keywords.TestKeywords";
 
         [TestFixtureSetUp]
         public void Setup()
         {
             var config = new LibraryConfig();
             config.Assembly = "NRobotRemote.Test";
-            config.TypeName = "NRobotRemote.Test.Keywords.RunKeyword";
+            config.TypeName = RunKeywordType;
             _keywordManager = new KeywordManager();
             _keywordManager.AddLibrary(config);
-            config.TypeName = "NRobotRemote.Test.Keywords.TestKeywords";
+            config.TypeName = TestKeywordType;
             _keywordManager.AddLibrary(config);
         }
 
         [Test]
         public void RunKeyword_NoArgs_VoidReturn_NullArgs()
         {
-            var result = _keywordManager.RunKeyword("NoInputNoOutput", null);
+            var result = _keywordManager.RunKeyword(RunKeywordType, "NoInputNoOutput", null);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Pass);
             Assert.IsTrue(result.KeywordErrorType == RunKeywordErrorTypes.NoError);
             Assert.IsTrue(result.KeywordReturn == null);
@@ -39,7 +41,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void RunKeyword_NoArgs_VoidReturn_EmptyArgs()
         {
-            var result = _keywordManager.RunKeyword("NoInputNoOutput", new object[0]);
+            var result = _keywordManager.RunKeyword(RunKeywordType, "NoInputNoOutput", new object[0]);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Pass);
             Assert.IsTrue(result.KeywordErrorType == RunKeywordErrorTypes.NoError);
             Assert.IsTrue(result.KeywordReturn == null);
@@ -48,7 +50,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void RunKeyword_ThrowsException()
         {
-            var result = _keywordManager.RunKeyword("ThrowsException", new object[0]);
+            var result = _keywordManager.RunKeyword(RunKeywordType, "ThrowsException", new object[0]);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Fail);
             Assert.IsTrue(result.KeywordReturn == null);
             Assert.IsTrue(result.KeywordErrorType == RunKeywordErrorTypes.Normal);
@@ -59,7 +61,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void RunKeyword_ThrowsFatalException()
         {
-            var result = _keywordManager.RunKeyword("ThrowsFatalException", new object[0]);
+            var result = _keywordManager.RunKeyword(RunKeywordType, "ThrowsFatalException", new object[0]);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Fail);
             Assert.IsTrue(result.KeywordReturn == null);
             Assert.IsTrue(result.KeywordErrorType == RunKeywordErrorTypes.Fatal);
@@ -70,7 +72,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void RunKeyword_ThrowsContinuableException()
         {
-            var result = _keywordManager.RunKeyword("ThrowsContinuableException", new object[0]);
+            var result = _keywordManager.RunKeyword(RunKeywordType, "ThrowsContinuableException", new object[0]);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Fail);
             Assert.IsTrue(result.KeywordReturn == null);
             Assert.IsTrue(result.KeywordErrorType == RunKeywordErrorTypes.Continuable);
@@ -81,7 +83,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void RunKeyword_TraceOutput()
         {
-            var result = _keywordManager.RunKeyword("WritesTraceOutput", null);
+            var result = _keywordManager.RunKeyword(RunKeywordType, "WritesTraceOutput", null);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Pass);
             Assert.IsTrue(result.KeywordReturn == null);
             Assert.IsTrue(result.KeywordOutput.Contains("First line"));
@@ -91,7 +93,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void RunKeyword_IntReturnType()
         {
-            var result = _keywordManager.RunKeyword("Int ReturnType", null);
+            var result = _keywordManager.RunKeyword(TestKeywordType, "Int ReturnType", null);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Pass);
             Assert.IsTrue(Convert.ToInt32(result.KeywordReturn) == 1);
         }
@@ -99,7 +101,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void RunKeyword_Int64ReturnType()
         {
-            var result = _keywordManager.RunKeyword("Int64 ReturnType", null);
+            var result = _keywordManager.RunKeyword(TestKeywordType, "Int64 ReturnType", null);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Pass);
             Assert.IsTrue(Convert.ToInt32(result.KeywordReturn) == 1);
         }
@@ -107,7 +109,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void RunKeyword_StringReturnType()
         {
-            var result = _keywordManager.RunKeyword("String ReturnType", null);
+            var result = _keywordManager.RunKeyword(TestKeywordType, "String ReturnType", null);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Pass);
             Assert.IsTrue(Convert.ToString(result.KeywordReturn) == "1");
         }
@@ -115,7 +117,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void RunKeyword_DoubleReturnType()
         {
-            var result = _keywordManager.RunKeyword("Double ReturnType", null);
+            var result = _keywordManager.RunKeyword(TestKeywordType, "Double ReturnType", null);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Pass);
             Assert.IsTrue((Convert.ToDouble(result.KeywordReturn)).Equals(1));
         }
@@ -123,7 +125,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void RunKeyword_BooleanReturnType()
         {
-            var result = _keywordManager.RunKeyword("Boolean ReturnType", null);
+            var result = _keywordManager.RunKeyword(TestKeywordType, "Boolean ReturnType", null);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Pass);
             Assert.IsTrue(Convert.ToBoolean(result.KeywordReturn));
         }
@@ -131,7 +133,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void RunKeyword_StringArrayReturnType()
         {
-            var result = _keywordManager.RunKeyword("StringArray ReturnType", null);
+            var result = _keywordManager.RunKeyword(TestKeywordType, "StringArray ReturnType", null);
             var returnval = (string[]) result.KeywordReturn;
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Pass);
             Assert.IsTrue(returnval.Length == 3);
@@ -140,28 +142,28 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void RunKeyword_LessThanRequiredArgs()
         {
-            var result = _keywordManager.RunKeyword("String ParameterType", new object[] {"1"});
+            var result = _keywordManager.RunKeyword(TestKeywordType, "String ParameterType", new object[] {"1"});
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Fail);
         }
 
         [Test]
         public void RunKeyword_MoreThanRequiredArgs()
         {
-            var result = _keywordManager.RunKeyword("String ParameterType", new object[] { "1", "2", "3" });
+            var result = _keywordManager.RunKeyword(TestKeywordType, "String ParameterType", new object[] { "1", "2", "3" });
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Fail);
         }
 
         [Test]
         public void RunKeyword_StaticMethod()
         {
-            var result = _keywordManager.RunKeyword("PublicStatic Method", null);
+            var result = _keywordManager.RunKeyword(TestKeywordType, "PublicStatic Method", null);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Pass);
         }
 
         [Test]
         public void RunKeyword_KeywordDuration()
         {
-            var result = _keywordManager.RunKeyword("PublicStatic Method", null);
+            var result = _keywordManager.RunKeyword(TestKeywordType, "PublicStatic Method", null);
             Assert.IsTrue(result.KeywordStatus == RunKeywordStatus.Pass);
             Assert.IsTrue(result.KeywordDuration > 0);
         }

@@ -13,13 +13,14 @@ namespace NRobotRemote.Test.DomainTests
     {
 
         private KeywordManager _keywordManager;
+        private const string Typename = "NRobotRemote.Test.Keywords.TestKeywords";
 
         [TestFixtureSetUp]
         public void Setup()
         {
             var config = new LibraryConfig();
             config.Assembly = "NRobotRemote.Test";
-            config.TypeName = "NRobotRemote.Test.Keywords.TestKeywords";
+            config.TypeName = Typename;
             _keywordManager = new KeywordManager();
             _keywordManager.AddLibrary(config);
         }
@@ -27,7 +28,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void GetKeywordArguments_StringArguments()
         {
-            var keyword = _keywordManager.GetKeyword("String ParameterType");
+            var keyword = _keywordManager.GetKeyword(Typename, "String ParameterType");
             Assert.IsTrue(keyword.ArgumentCount == 2);
             Assert.Contains("arg1", keyword.ArgumentNames);
             Assert.Contains("arg2", keyword.ArgumentNames);
@@ -36,7 +37,7 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void GetKeywordArguments_NoArguments()
         {
-            var keyword = _keywordManager.GetKeyword("No Parameters");
+            var keyword = _keywordManager.GetKeyword(Typename, "No Parameters");
             Assert.IsTrue(keyword.ArgumentCount == 0);
         }
 

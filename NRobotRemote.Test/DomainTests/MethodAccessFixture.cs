@@ -12,6 +12,7 @@ namespace NRobotRemote.Test.DomainTests
     {
 
         private KeywordManager _keywordManager;
+        private const string Typename = "NRobotRemote.Test.Keywords.TestKeywords";
 
         [TestFixtureSetUp]
         public void Setup()
@@ -19,7 +20,7 @@ namespace NRobotRemote.Test.DomainTests
             var config = new LibraryConfig();
             _keywordManager = new KeywordManager();
             config.Assembly = "NRobotRemote.Test";
-            config.TypeName = "NRobotRemote.Test.Keywords.TestKeywords";
+            config.TypeName = Typename;
             _keywordManager.AddLibrary(config);
         }
 
@@ -27,63 +28,63 @@ namespace NRobotRemote.Test.DomainTests
         [Test]
         public void Public_Method()
         {
-            var result = _keywordManager.GetAllKeywordNames();
+            var result = _keywordManager.GetKeywordNamesForType(Typename);
             Assert.Contains("PUBLIC METHOD", result);
         }
 
         [Test]
         public void PublicStatic_Method()
         {
-            var result = _keywordManager.GetAllKeywordNames();
+            var result = _keywordManager.GetKeywordNamesForType(Typename);
             Assert.Contains("PUBLICSTATIC METHOD", result);
         }
 
         [Test]
         public void Private_Method()
         {
-            var result = _keywordManager.GetAllKeywordNames();
+            var result = _keywordManager.GetKeywordNamesForType(Typename);
             Assert.That(result, Has.No.Member("PRIVATE METHOD"));
         }
 
         [Test]
         public void Internal_Method()
         {
-            var result = _keywordManager.GetAllKeywordNames();
+            var result = _keywordManager.GetKeywordNamesForType(Typename);
             Assert.That(result, Has.No.Member("INTERNAL METHOD"));
         }
 
         [Test]
         public void Protected_Method()
         {
-            var result = _keywordManager.GetAllKeywordNames();
+            var result = _keywordManager.GetKeywordNamesForType(Typename);
             Assert.That(result, Has.No.Member("PROTECTED METHOD"));
         }
 
         [Test]
         public void Obsolete_Method()
         {
-            var result = _keywordManager.GetAllKeywordNames();
+            var result = _keywordManager.GetKeywordNamesForType(Typename);
             Assert.That(result, Has.No.Member("OBSOLETE METHOD"));
         }
 
         [Test]
         public void PrivateStatic_Method()
         {
-            var result = _keywordManager.GetAllKeywordNames();
+            var result = _keywordManager.GetKeywordNamesForType(Typename);
             Assert.That(result, Has.No.Member("PRIVATESTATIC METHOD"));
         }
 
         [Test]
         public void InternalStatic_Method()
         {
-            var result = _keywordManager.GetAllKeywordNames();
+            var result = _keywordManager.GetKeywordNamesForType(Typename);
             Assert.That(result, Has.No.Member("INTERNALSTATIC METHOD"));
         }
 
         [Test]
         public void ProtectedStatic_Method()
         {
-            var result = _keywordManager.GetAllKeywordNames();
+            var result = _keywordManager.GetKeywordNamesForType(Typename);
             Assert.That(result, Has.No.Member("PROTECTEDSTATIC METHOD"));
         }
 
