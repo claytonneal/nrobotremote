@@ -19,18 +19,35 @@ NRobotRemote is a .Net based Robot Framework remote server. It can be used to ho
 | 1.2.4       | 12-Sep-2013 | issue 28 |
 | 1.2.5       | 16-Feb-2014 | issue 30 |
 | 1.2.6       | 18-Aug-2015 | upgrade to .net 4.5 |
+| 2.0.0       | 05-Jan-2016 | upgrade to .net 4.6, refactor to threading |
+
+**Version 2 Notes**
+
+A complete refactor was done for V2, that added multi-threaded execution of keywords.
+In V1, NRobotRemote was single threaded, and therefore could only execute one keyword at once. This was fine for most situations, but when using [Pabot](https://github.com/mkorpela/pabot) to parallelise the execution of Robot Framework tests, it meant that tests were being slowed down by NRobotRemote being single threaded.
+In V2 each request received by NRobotRemote from Robot Framework, a new thread is created to execute the keyword. This allows only one instance of NRobotRemote is needed by using Pabot.
+
+Version 2 brings the following potentially breaking changes:
+1. Upgraded to .Net 4.6
+2. The NuGet package is compiled as AnyCPU
+3. Keyword assemblies are no longer loaded into separate application domains, but are loaded "in process"
+4. When using Pabot to execute tests, the keywords hosted in NRobotRemote must be thread safe
+5. NRobotRemoteConsole has been dropped
+
+**Version 1 End of Life**
+
+At the moment V2 has its own branch on GitHub and is maintained separatetly to V1.
+The plan is then to deprecate V1 during 2016.
 
 # How To Write a Keyword Library
 
-Writing a keyword library is very simple.Create a new class library project in C#/Vb.net and add a _public_ class to the project. All public _instance_ or _static_ methods of the class with:
+Writing a keyword library is very simple.Create a new class library project in C#/Vb.net and add a _public_ class to the project. All public _instance_ or _static_ methods of the class which have:
 
-  * Return type = void, String, Boolean, Int32, Int64, Double, String[[.md](.md)]
-  * No parameters
-  * All parameters of type String
+  * Return type = void, String, Boolean, Int32, Int64, Double, String Array
+  * Either has no parameters, or all parameters are of type String
 
-Will be considered as keywords.
-
-The return type of String[] corresponds to robot framework list variables, the other return types are robot framework scalar variables.
+Will be considered as keywords, and exposed by NRobotRemote.
+The return type of String Array corresponds to robot framework list variables, the other return types are robot framework scalar variables.
 
 **Example**
 
@@ -64,15 +81,15 @@ The following keywords can be used by robot framework
   * DOOPERATION
   * DO TASK
 
-**General Notes**
+**Overloaded Methods**
 
-  * It is not possible to overload the same keyword method. For a method to be considered a keyword it must have only one implementation.
+It is not possible to overload the same keyword method. For a method to be considered a keyword it must have only one implementation.
 
 **Keyword Names**
 
 When a keyword such as "DO TASK" is used in a robot framework script, NRobotRemote will try to find a corresponding method with name "do\_task". i.e. Spaces are replaced with underscores.
 
-**Documentation**
+**Keyword Documentation**
 
 If you compile your keyword class to produce xml documentation, the xml documentation file can be passed to NRobotRemote. When the keyword is executed the _summary_ xml element of the documentation for the executed method is passed back to robot framework and appears in the results file.
 
@@ -103,9 +120,7 @@ AS of Robot Framework 2.8, a keyword can return continuable and fatal errors. To
   * ContinuableKeywordException
   * FatalKeywordException
 
-These exception types are defined in assembly NRobotRemote.Exceptions. This can be added as a reference in the keyword assembly.
-
-If a keyword throws any other type of exception it is treated as a normal error.
+These exception types are defined in assembly NRobotRemote.Exceptions. This can be added as a reference in the keyword assembly. If a keyword throws any other type of exception it is treated as a normal error.
 
 An example of a continuable keyword is shown below:
 
@@ -126,12 +141,8 @@ public class MyKeywordClass
 }
 ```
 
-**FAQ**
+** Write To Robot Framework Logs **
 
-**Is it possible for the keyword class to maintain state?**<br />
-Yes, only one instance of the keyword class is created for the duration of the service.
-
-**How can my keyword give log information back to robot framework to include in the results file?**<br />
 All _Trace_ information is collected by NRobotRemote when the keyword method is executed. This is passed back to robot framework to include in the results report. Example:
 
 ```
@@ -145,29 +156,47 @@ public class MyKeywordClass
 }
 ```
 
+** Exposed Keyword URL's **
+
+NRobotRemote can host multiple keyword types. These are exposed to robot framework XmlRpc at url:
+
+http://(host):(port)/(fulltypename)
+
+Where _fulltypename_ is the full type name of the keyword class (including namespace) with "." replaced by "/"
+For example if you have developed keyword class "MyKeywords" in namespace "MyCompany.Robot", then these keywords will be exposed at url:
+
+http://(host):(port)/MyComany/Robot/MyKeywords
+
+
+**Keyword Development FAQ**
+
+**Is it possible for the keyword class to maintain state?**<br />
+In V1 : Yes, only one instance of the keyword class is created for the duration of the service.
+In V2 : Keywords should be thread safe, so should maintain state in a thread safe manner.
+
 **How is a keyword considered as a FAIL**?
 A keyword method is considered as FAIL (and will be shown in the robot framework report as FAIL), if the method raises an _exception_. Otherwise the keyword will be considered as PASS.
 
 **Can a keyword method return null?**
-Yes, if a methods return parameter type is _string_ the method can return null. Nullable int, bool, double arent supported
+Yes, if a methods return parameter type is _string_ the method can return null. Nullable int, bool, double arent supported.
 
-**Should I compile as x86, x64, or AnyCPU?**
-Compile to the same as the instance of NRobotRemote that will be used. If your keyword library is x64, you will need x64 NRobotRemote
+**Should I compile my Keywords as x86, x64, or AnyCPU?**
+NRobotRemote NuGet package is AnyCPU, if your keyword class is needed to be x86 or x64, you can recompile NRobotRemote to be the same. x84 and x64 NuGet packages arent available.
 
 **Is it possible to load keyword assemblies with conflicting dependencies?**
-Yes, each keyword assembly and its dependencies are loaded into a separate application domain.
+In V1 : Yes, each keyword assembly and its dependencies are loaded into a separate application domain.
+In V2 : No, all keyword assemblies are loaded into the same application domain.
 
 **What constructor do I need in my keyword class?**
 For _instance_ and _static_ methods to be considered as keywords, the keyword class needs a default parameter-less constructor. A constructor is not needed for _static_ methods to be considered as keywords.
 
 **Can I install my keyword library into the GAC?**
-Yes, NRobotRemote can load keyword assemblies from the GAC by specifying the full assembly details (Name, Culture, Version, PublicKey). For example using NRobotRemoteConsole to load System.IO.File class as a keyword library:
+Yes, NRobotRemote can load keyword assemblies from the GAC by specifying the full assembly details (Name, Culture, Version, PublicKey).
 
-```
-NRobotRemoteConsole.exe -k mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089:System.IO.File -p 8271
-```
 
 # NRobotRemote Console
+
+Note : NRobotRemoteConsole is deprecated in V2.
 
 **Config File**
 
@@ -182,40 +211,6 @@ The following command line arguments are used:
 | -k | specify the libraries, types, doc files to load. Multiple items in format _assembly:type:docfile_ where docfile is optional |
 
 **NOTE** The _type_ name should include the namespace.
-
-**Hosting Multiple Keyword Types**
-
-NRobotRemoteConsole can host multiple keyword types. These are exposed to robot framework XmlRpc at url:
-
-http://(host):(port)/(fulltypename)
-
-Where _fulltypename_ is the full type name of the keyword class (including namespace) with "." replaced by "/"
-
-**Example:**
-The following command line loads two keyword types from two different libraries:
-
-```
-NRobotRemoteConsole.exe -p 8271 -k UILibrary.dll:UILibrary.UIKeywords OracleLibrary.dll:OracleLibrary.OracleKeywords
-```
-
-The keywords are then exposed to robot framework at url's:
-
-  * http://localhost:8271/UILibrary/UIKeywords
-  * http://localhost:8271/OracleLibrary/OracleKeywords
-
-**Starting and Stopping**
-
-To start NRobotRemoteConsole.exe supply the above command line parameters. <br />
-To stop NRobotRemoteConsole.exe:
-
-  * Press Ctrl+C in the window
-  * Close the window
-  * Execute keyword "STOP REMOTE SERVER"
-  * Call XmlRpc method stop\_remote\_server
-
-**Monitoring**
-
-A remote _NRobotRemoteConsole_ can be checked to see if up and running by pointing a web browser to http://host:port. This will display information on the NRobotRemote instance, and the available keywords. This is also useful for example if NRobotRemote is started via Ant, the http condition can be used to wait for it to start.
 
 # NRobotRemotTray
 
@@ -299,9 +294,5 @@ srv.Stop();
 
 _RemoteService_ also has a public event called _StopRequested_ this event is raised when keyword STOP REMOTE SERVER is called. The host application can determine if to close or not by handling this event. The event is called in a background thread.
 
-**NOTES**
-
-  * The docfile parameter is optional
-  * Two background threads are started when _StartAsync_ is called, one thread to listen for HTTP requests, and the other to process HTTP requests.
 
 
