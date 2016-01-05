@@ -198,20 +198,6 @@ Yes, NRobotRemote can load keyword assemblies from the GAC by specifying the ful
 
 Note : NRobotRemoteConsole is deprecated in V2.
 
-**Config File**
-
-The config file _NRobotRemoteConsole.exe.config_ is used for _log4net_ configuration. By default log information is written to the console and also to a _rolling_ log file called _NRobotRemoteConsole.log_. Additional appenders can be added, see Log4Net documentation.
-
-**Command Line**
-
-The following command line arguments are used:
-
-| -p | the port number |
-|:---|:----------------|
-| -k | specify the libraries, types, doc files to load. Multiple items in format _assembly:type:docfile_ where docfile is optional |
-
-**NOTE** The _type_ name should include the namespace.
-
 # NRobotRemotTray
 
 NRoboteRemoteTray is a desktop tray application that hosts the NRobotRemote Robot Framework remote server. It can be used as an alternative to NRobotRemoteConsole.
