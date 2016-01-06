@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>NRobotRemote</id>
-        <version>2.0.0</version>
+        <version>2.0.1</version>
         <authors>ClaytonNeal</authors>
 		<projectUrl>https://github.com/claytonneal/nrobotremote</projectUrl>
 		<iconUrl>http://code.google.com/p/nrobotremote/logo?cct=1374673462</iconUrl>
