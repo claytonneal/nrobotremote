@@ -176,6 +176,7 @@ namespace NRobotRemote.Services
                                                   String.Join(",", keyword.ArgumentNames),
                                                   keyword.KeywordDocumentation));
                     }
+        	        html.Append("</tbody></table>");
         	    }
                 
 	        	//finish html
